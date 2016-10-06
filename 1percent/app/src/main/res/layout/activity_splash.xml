@@ -4,8 +4,7 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.onepercent.sumus.a1percent.SplashActivity">
-
+    tools:context="com.onepercent.sumus.onepercent.SplashActivity">
     <ImageView
         android:scaleType="fitXY"
         android:background="@mipmap/splash"

@@ -1,4 +1,4 @@
-package com.onepercent.sumus.a1percent;
+package com.onepercent.sumus.onepercent;
 
 import org.junit.Test;
 

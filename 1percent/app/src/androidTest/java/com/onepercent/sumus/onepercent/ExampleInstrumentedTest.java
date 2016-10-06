@@ -1,4 +1,4 @@
-package com.onepercent.sumus.a1percent;
+package com.onepercent.sumus.onepercent;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.onepercent.sumus.a1percent", appContext.getPackageName());
+        assertEquals("com.onepercent.sumus.onepercent", appContext.getPackageName());
     }
 }

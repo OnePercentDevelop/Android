@@ -1,6 +1,5 @@
-package com.onepercent.sumus.a1percent;
+package com.onepercent.sumus.onepercent;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
