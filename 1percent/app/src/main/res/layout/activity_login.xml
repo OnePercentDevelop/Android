@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    tools:context="com.onepercent.sumus.onepercent.LoginActivity">
+
+
+    <TextView
+        android:layout_weight="5"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/colorWhite"
+        android:layout_width="wrap_content"
+        android:text="1 P E R C E N T"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_weight="3"
+        android:id="@+id/inputlayout"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:background="@mipmap/input_back"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="아이디"
+            android:paddingLeft="20dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:hint="비밀번호"
+            android:paddingLeft="20dp"
+            android:background="@mipmap/input_back"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/login_loginBtn"
+            android:background="@color/colorTran"
+            android:layout_marginBottom="10dp"
+            android:src="@mipmap/login_before"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="2"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_alignBottom="@id/inputlayout"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="10sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:textColor="#e6e6e6"
+            android:text="계정이 없으신가요?     "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textColor="#e6e6e6"
+            android:text="가입하기"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="normal|bold" />
+    </LinearLayout>
+
+</LinearLayout>

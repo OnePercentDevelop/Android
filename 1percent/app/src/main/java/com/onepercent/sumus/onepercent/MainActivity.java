@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
         mContext = this;
-        startActivity(new Intent(this, SplashActivity.class)); // 스플래쉬
+
 
         FragmentSetting();
 
