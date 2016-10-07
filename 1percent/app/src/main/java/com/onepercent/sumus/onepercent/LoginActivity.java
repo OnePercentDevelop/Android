@@ -25,9 +25,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         // FCM
-        String Token = FirebaseInstanceId.getInstance().getToken();
+        String Token = FirebaseInstanceId.getInstance().getToken(); // Token - 디바이스 정보
         Log.d("SUN",Token);
-        FirebaseMessaging.getInstance().subscribeToTopic("notice");
+        FirebaseMessaging.getInstance().subscribeToTopic("notice"); //  (notice)토픽명 그룹 전체 메세지 전송
     }
 
     @Override
