@@ -50,7 +50,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.app).setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.app))
-                .setContentTitle(message)
+                .setContentTitle("1PERCENT")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri).setLights(000000255, 500, 2000)

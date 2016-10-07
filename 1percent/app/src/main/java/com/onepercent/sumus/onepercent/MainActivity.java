@@ -1,8 +1,6 @@
 package com.onepercent.sumus.onepercent;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.view.WindowManager;
 
+
 public class MainActivity extends AppCompatActivity {
 
     public static Context mContext;
@@ -19,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
     public ViewPager mViewPager;
     TabLayout tabLayout;
 
+
+    public final static String AUTH_KEY_FCM = "AIzaSyCxE2vBXE_-3aWxKO62K9-caos_6iauXTk";
+    public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send"; //"https://gcm-http.googleapis.com/gcm/send";//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void FragmentSetting(){
+    void FragmentSetting() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -86,5 +88,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         mViewPager.setCurrentItem(1);
     }
+
+
 
 }

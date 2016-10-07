@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:paddingBottom="20dp"
+    android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="20dp">
@@ -39,4 +40,11 @@
             android:background="@color/colorTran"
             android:src="@mipmap/ic_back_right" />
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/pushBtn"
+        android:text="push"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
