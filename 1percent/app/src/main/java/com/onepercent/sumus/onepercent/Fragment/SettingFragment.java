@@ -18,7 +18,7 @@ import com.onepercent.sumus.onepercent.R;
 
 public class SettingFragment extends Fragment implements View.OnClickListener {
     View views;
-   ImageButton setting_rightBtn;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,14 +33,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.setting_rightBtn:
-                ((MainActivity)MainActivity.mContext).mViewPager.setCurrentItem(1);
-                break;
         }
     }
 
     void InitWidget(){
-        setting_rightBtn = (ImageButton) views.findViewById(R.id.setting_rightBtn);
-        setting_rightBtn.setOnClickListener(this);
     }
 }

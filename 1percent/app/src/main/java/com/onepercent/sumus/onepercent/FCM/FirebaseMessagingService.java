@@ -22,6 +22,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.onepercent.sumus.onepercent.MainActivity;
 import com.onepercent.sumus.onepercent.R;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 
@@ -41,11 +43,18 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
     private void sendPushNotification(String message) {
-        Log.d("SUN","received message : " + message);
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
+
+
+
+        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle()
+                // .bigPicture(myBitmap)
+                .setBigContentTitle("1PERCENT")
+                .setSummaryText(message);
+
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
@@ -53,6 +62,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentTitle("1PERCENT")
                 .setContentText(message)
                 .setAutoCancel(true)
+                .setStyle(new NotificationCompat.InboxStyle().setSummaryText(message))
                 .setSound(defaultSoundUri).setLights(000000255, 500, 2000)
                 .setContentIntent(pendingIntent);
 
@@ -64,5 +74,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
+
 
 }

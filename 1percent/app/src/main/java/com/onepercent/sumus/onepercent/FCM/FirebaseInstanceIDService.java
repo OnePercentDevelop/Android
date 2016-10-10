@@ -11,11 +11,6 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import java.io.IOException;
 
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-
 
 /*
 사용자 기기별 token을 생성하는 클래스 입니다.
@@ -35,6 +30,7 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     }
 
+    /* token 서버로 전송 소스
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
 
@@ -56,5 +52,5 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
         }
 
     }
-
+       */
 }
