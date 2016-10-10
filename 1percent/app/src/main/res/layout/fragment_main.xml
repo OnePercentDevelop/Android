@@ -19,42 +19,52 @@
             <!-- 시간 레이아웃 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@color/colorAccent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:paddingBottom="30dp"
+                android:paddingTop="30dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif"
-                    android:text="오늘의 상품"
-                    android:textStyle="normal|bold"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="25sp" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:src="@mipmap/clock" />
+
+                    <TextView
+                        style="@style/main_title"
+                        android:text="오늘의 상품" />
+
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif"
-                    android:text="07:40:32"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="35sp"
-                    android:textStyle="normal|bold" />
+                    android:id="@+id/main_gifticonTv"
+                    style="@style/main_small"
+                    android:layout_marginBottom="20dp"
+                    android:text="" />
+
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif"
-                    android:text="1,178"
-                    android:textColor="@color/colorDarkGray"
-                    android:textSize="25sp"
-                    android:textStyle="normal|bold" />
+                    style="@style/main_clock"
+                    android:layout_marginBottom="20dp"
+                    android:text="07:40:32" />
+
+
+                <TextView
+                    android:id="@+id/main_voterCountTv"
+                    style="@style/main_vote"
+                    android:text="" />
+
+                <TextView
+                    style="@style/main_small"
+                    android:text="참가자" />
 
             </LinearLayout>
 
@@ -67,93 +77,76 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif"
-                    android:text="오늘의 질문"
-                    android:textStyle="normal|bold"
-                    android:textColor="@color/colorBlack"
-                    android:gravity="bottom"
-                    android:layout_weight="2"
-                    android:textSize="25sp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif"
-                    android:layout_weight="1"
-                    android:textStyle="normal|bold"
-                    android:text="다음 보기중 사람들이 가장 많이 먹은 음식은?"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="15sp" />
+                    style="@style/main_title"
+                    android:layout_weight="2"
+                    android:gravity="bottom"
+                    android:text="오늘의 질문" />
+
+                <TextView
+                    style="@style/main_small"
+                    android:layout_weight="1.20"
+                    android:id="@+id/main_questionTv"
+                    android:text="" />
+
 
                 <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/main_exampleLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <Button
-                        android:text="돈까스"
-                        android:background="@color/colorWhite"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:text="김치찌개"
-                        android:background="@color/colorWhite"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:text="삼겹살"
-                        android:background="@color/colorWhite"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:text="파스타"
-                        android:background="@color/colorWhite"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </LinearLayout>
 
+
             <!-- 당첨자 레이아웃  -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@color/colorWhite"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:paddingTop="20dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif"
-                    android:text="지난주 당첨자"
-                    android:textStyle="normal|bold"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="25sp" />
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/fanfare_left" />
+
+                    <TextView
+                        style="@style/main_title"
+                        android:text="지난주 당첨자" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/fanfare_right" />
+
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/main_beforePrizeTv"
+                    style="@style/main_title"
+                    android:text="" />
+                <TextView
+                    style="@style/main_small"
+                    android:layout_marginBottom="20dp"
+                    android:text="당첨되신 여러분들 진심으로 축하드립니다" />
+
+                <ImageView
+                    android:src="@mipmap/prize_decoration"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal|bold"
-                    android:textColor="@color/colorDarkGray"
-                    android:text="당첨되신 여러분들 진심으로 축하드립니다"
-                    android:textSize="15sp"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
 
