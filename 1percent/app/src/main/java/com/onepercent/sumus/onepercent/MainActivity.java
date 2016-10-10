@@ -11,6 +11,8 @@ import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.WindowManager;
 
+import java.text.SimpleDateFormat;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
 //        MySharedPreference pref = new MySharedPreference(this);
 //        pref.removePreferences("kakaoID");
 //        Log.d("SUN","MainActivity # kakao : "+ pref.getPreferences("kakaoID"));
+
+        long todaydate = System.currentTimeMillis(); // long 형의 현재시간
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        String today = df.format(todaydate);
+        Log.d("SUN","today : "+today);
+
 
         FragmentSetting();
         InitWidget();
@@ -49,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    return new com.onepercent.sumus.onepercent.Fragment.MainFragment();
-                case 1:
-                    return new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment();
-                case 2:
                     return new com.onepercent.sumus.onepercent.Fragment.SettingFragment();
+                case 1:
+                    return new com.onepercent.sumus.onepercent.Fragment.MainFragment();
+                case 2:
+                    return new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment();
 
             }
             return null;
@@ -68,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "홈";
-                case 1:
-                    return "당첨자";
-                case 2:
                     return "설정";
+                case 1:
+                    return "홈";
+                case 2:
+                    return "당첨자";
             }
             return null;
         }
@@ -93,10 +102,44 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite),getResources().getColor(R.color.colorWhite));
 
-        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.home_btn));
-        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
-        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
-        mViewPager.setCurrentItem(0);
+
+        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
+        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
+        mViewPager.setCurrentItem(1);
+        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.select_home_btn));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite),getResources().getColor(R.color.colorPoint));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){   }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                switch (position)
+                {
+                    case 0: // 설정
+                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.select_setting_btn));
+                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+                        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
+                        break;
+                    case 1: // 홈
+                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
+                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.select_home_btn));
+                        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
+                        break;
+                    case 2: // 당첨자
+                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
+                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+                        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.select_prize_btn));
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)  { }
+        });
     }
 
 
