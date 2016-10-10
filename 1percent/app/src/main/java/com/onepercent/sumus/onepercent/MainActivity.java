@@ -15,6 +15,12 @@ import java.text.SimpleDateFormat;
 
 
 public class MainActivity extends AppCompatActivity {
+    /*
+    (f) InitWidget : 위젯 초기 설정
+    (f) FragmentSetting : TabLayout & Viewpager 사용 위한 Fragment 설정
+    (c) SectionsPagerAdapter : Viewpager 적용할 FragmentAdater
+    */
+
 
     public static Context mContext;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -27,18 +33,6 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
         mContext = this;
-
-//        MySharedPreference pref = new MySharedPreference(this);
-//        pref.removePreferences("kakaoID");
-//        Log.d("SUN","MainActivity # kakao : "+ pref.getPreferences("kakaoID"));
-
-        long todaydate = System.currentTimeMillis(); // long 형의 현재시간
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-        String today = df.format(todaydate);
-        Log.d("SUN","today : "+today);
-
-
         FragmentSetting();
         InitWidget();
 
@@ -101,14 +95,13 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite),getResources().getColor(R.color.colorWhite));
-
-
         tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
-        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.home_btn));
-        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
-        mViewPager.setCurrentItem(1);
         tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.select_home_btn));
+        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
         tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite),getResources().getColor(R.color.colorPoint));
+
+        mViewPager.setCurrentItem(1);
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
         {
             @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -18,9 +19,17 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 import com.onepercent.sumus.onepercent.Kakao.KakaoSignupActivity;
+import com.onepercent.sumus.onepercent.Object.MySharedPreference;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+
+    /*
+    (f) InitWidget : 위젯 초기 설정
+    (f) KakaoSetting : 카카오톡 로그인 연동 위한 설정
+    (f) FCMSetting : FCM push 위한 설정
+    */
+
     ImageButton login_loginBtn;
     EditText login_idEt;
 
@@ -39,17 +48,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        //startActivity(new Intent(this, SplashActivity.class)); // 스플래쉬
         mContext = this;
 
         InitWidget();
-
         KakaoSetting();
-
-        // FCM
-        String Token = FirebaseInstanceId.getInstance().getToken(); // Token - 디바이스 정보
-        FirebaseMessaging.getInstance().subscribeToTopic("notice"); //  (notice)토픽명 그룹 전체 메세지 전송
-
+        FCMSetting();
 
     }
 
@@ -68,20 +71,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     void KakaoSetting(){
-        /**카카오톡 로그아웃 요청**/
-        //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
-        //테스트 하시기 편하라고 매번 로그아웃 요청을 수행하도록 코드를 넣었습니다 ^^
-
+        /*
         UserManagement.requestLogout(new LogoutResponseCallback() {
             @Override
             public void onCompleteLogout() {
                 //로그아웃 성공 후 하고싶은 내용 코딩 ~
             }
         });
-
-
+*/
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
+    }
+
+    void FCMSetting(){
+        // FCM
+        String deviceToken = FirebaseInstanceId.getInstance().getToken(); // Token - 디바이스 정보
+        FirebaseMessaging.getInstance().subscribeToTopic("notice"); //  (notice)토픽명 그룹 전체 메세지 전송
     }
 
     @Override

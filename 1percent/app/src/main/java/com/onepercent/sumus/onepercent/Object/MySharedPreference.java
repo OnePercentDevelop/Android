@@ -9,39 +9,41 @@ import android.content.SharedPreferences;
  */
 
 public class MySharedPreference {
-
-    public final  String PREF_INTRO_USER_AGREEMENT = "PREF_USER_AGREEMENT";
-    public final static String PREF_MAIN_VALUE = "PREF_MAIN_VALUE";
+     /*
+        kakao : kakao 관련 데이터
+        oneday : 하루에 한번만 동기화 필요한 데이터
+        fcm : fcm push 위한 데이터
+     */
 
     static Context mContext;
 
     public MySharedPreference(Context c) {  mContext = c; }
 
     // 값 불러오기
-    public String getPreferences(String key){
-        SharedPreferences pref = mContext.getSharedPreferences("pref", Activity.MODE_PRIVATE);
+    public String getPreferences(String preName, String key){
+        SharedPreferences pref = mContext.getSharedPreferences(preName, Activity.MODE_PRIVATE);
         return pref.getString(key, "");
     }
 
     // 값 저장하기
-    public void setPreferences(String key, String value){
-        SharedPreferences pref = mContext.getSharedPreferences("pref", Activity.MODE_PRIVATE);
+    public void setPreferences(String preName,String key, String value){
+        SharedPreferences pref = mContext.getSharedPreferences(preName, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
     // 값(Key Data) 삭제하기
-    public void removePreferences(String key){
-        SharedPreferences pref = mContext.getSharedPreferences("pref", Activity.MODE_PRIVATE);
+    public void removePreferences(String preName, String key){
+        SharedPreferences pref = mContext.getSharedPreferences(preName, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.remove(key);
         editor.commit();
     }
 
     // 값(ALL Data) 삭제하기
-    public void removeAllPreferences(){
-        SharedPreferences pref = mContext.getSharedPreferences("pref", Activity.MODE_PRIVATE);
+    public void removeAllPreferences(String preName){
+        SharedPreferences pref = mContext.getSharedPreferences(preName, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
         editor.commit();

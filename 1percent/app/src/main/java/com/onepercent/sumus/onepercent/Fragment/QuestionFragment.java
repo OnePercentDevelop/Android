@@ -15,6 +15,10 @@ import com.onepercent.sumus.onepercent.R;
  */
 
 public class QuestionFragment  extends Fragment implements View.OnClickListener {
+    /*
+    (f) InitWidget : 위젯 초기 설정\
+    */
+
     View views;
     ImageButton question_leftBtn;
     @Override

@@ -14,6 +14,10 @@ import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
 
 public class KakaoSDKAdapter extends KakaoAdapter {
+   /*
+    (f) getSessionConfig : kakao 로그인 인증
+    (f) getApplicationConfig : Application이 가지고있는 정보를 얻기위한 interface.
+    */
 
     /**
      * 로그인을 위해 Session을 생성하기 위해 필요한 옵션을 얻기위한 abstract class.
@@ -57,7 +61,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
         };
     }
 
-    //Application이 가지고있는 정보를 얻기위한 interface.
+
     @Override
     public IApplicationConfig getApplicationConfig() {
         return new IApplicationConfig() {

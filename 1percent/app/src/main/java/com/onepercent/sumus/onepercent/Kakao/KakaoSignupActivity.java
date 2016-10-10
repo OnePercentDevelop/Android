@@ -17,6 +17,12 @@ import com.onepercent.sumus.onepercent.MainActivity;
 import com.onepercent.sumus.onepercent.Object.MySharedPreference;
 
 public class KakaoSignupActivity extends AppCompatActivity {
+     /*
+    (f) requestMe : 유저의 정보를 받아오는 함수
+    (f) redirectMainActivity : kakao 로그인 성공시 호출
+    (f) redirectLoginActivity : kakao 로그인 실패시 호출
+    */
+
     /**
      * Main으로 넘길지 가입 페이지를 그릴지 판단하기 위해 me를 호출한다.
      * @param savedInstanceState 기존 session 정보가 저장된 객체
@@ -31,9 +37,6 @@ public class KakaoSignupActivity extends AppCompatActivity {
         requestMe();
     }
 
-    /**
-     * 사용자의 상태를 알아 보기 위해 me API 호출을 한다.
-     */
     protected void requestMe() { //유저의 정보를 받아오는 함수
         UserManagement.requestMe(new MeResponseCallback() {
             @Override
@@ -59,7 +62,7 @@ public class KakaoSignupActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(UserProfile userProfile) {  //성공 시 userProfile 형태로 반환
-                Log.d("SUN","UserProfile : " + userProfile);
+                Log.d("SUN","KakaoSignupActivity # UserProfile : " + userProfile);
 
                 MySharedPreference pref = new MySharedPreference(getApplicationContext());
 
@@ -67,11 +70,11 @@ public class KakaoSignupActivity extends AppCompatActivity {
                 String kakaoNickname = userProfile.getNickname();     // Nickname 값을 가져옴
                 String profileImagePath = userProfile.getProfileImagePath();     // Nickname 값을 가져옴
 
-                pref.setPreferences("kakaoID", kakaoID);
-                pref.setPreferences("kakaoNickname", kakaoNickname);
-                pref.setPreferences("kakaoProfileImage", profileImagePath);
+                pref.setPreferences("kakao","kakaoID", kakaoID);
+                pref.setPreferences("kakao","kakaoNickname", kakaoNickname);
+                pref.setPreferences("kakao","kakaoProfileImage", profileImagePath);
 
-                Log.d("SUN","KakaoSignupActivity #  kakaoID : " + pref.getPreferences("kakaoID") + " , kakaoNick : " + pref.getPreferences("kakaoNickname"));
+               // Log.d("SUN","KakaoSignupActivity #  kakaoID : " + pref.getPreferences("kakao","kakaoID") + " , kakaoNick : " + pref.getPreferences("kakao","kakaoNickname"));
                 redirectMainActivity(); // 로그인 성공시 MainActivity로
             }
         });

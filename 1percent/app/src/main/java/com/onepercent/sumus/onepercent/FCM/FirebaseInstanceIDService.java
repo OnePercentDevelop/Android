@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.onepercent.sumus.onepercent.Object.MySharedPreference;
+import com.onepercent.sumus.onepercent.SplashActivity;
 
 import java.io.IOException;
 
@@ -25,32 +27,12 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         // Get updated InstanceID token.
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("SUN","FirebaseInstanceIDService : "+token);
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d("SUN","FirebaseInstanceIDService # deviceToken : "+deviceToken);
+
+        MySharedPreference pref = new MySharedPreference(((SplashActivity)SplashActivity.mContext));
+        pref.setPreferences("fcm","device",deviceToken);
 
     }
 
-    /* token 서버로 전송 소스
-    private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
-
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("Token", token)
-                .build();
-
-        //request
-        Request request = new Request.Builder()
-                .url("http://localhost:8010/FCMserver/fcm.jsp")
-                .post(body)
-                .build();
-
-        try {
-            client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-       */
 }

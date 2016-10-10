@@ -38,6 +38,8 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
+        <activity android:name=".Kakao.KakaoSignupActivity" />
+
 
         <!-- FCM -->
         <service android:name=".FCM.FirebaseMessagingService">
@@ -51,7 +53,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Kakao.KakaoSignupActivity"></activity>
+
     </application>
 
 </manifest>
