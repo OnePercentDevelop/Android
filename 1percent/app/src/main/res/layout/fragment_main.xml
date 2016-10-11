@@ -53,6 +53,7 @@
 
 
                 <TextView
+                    android:id="@+id/main_clockTv"
                     style="@style/main_clock"
                     android:layout_marginBottom="20dp"
                     android:text="07:40:32" />

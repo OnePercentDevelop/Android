@@ -20,6 +20,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -28,6 +30,9 @@ import com.onepercent.sumus.onepercent.MainActivity;
 import com.onepercent.sumus.onepercent.Object.MySharedPreference;
 import com.onepercent.sumus.onepercent.R;
 import com.onepercent.sumus.onepercent.SplashActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -38,6 +43,9 @@ import cz.msebera.android.httpclient.Header;
 public class SettingFragment extends Fragment implements View.OnClickListener {
      /*
     (f) InitWidget : 위젯 초기 설정
+    (f) byteArrayToBitmap : byte -> bitmap 으로 변환
+    (f) getImage_Server : 사용자 프로필 사진 가져오기
+    (f) setPushSetting_Server : push 설정값 전송
     */
 
     Context mContext;
@@ -48,14 +56,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     TextView setting_nameTv;
     Switch setting_pushSwc;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         views =  inflater.inflate(R.layout.fragment_setting, container, false);
         mContext = getContext();
         mAcitivity = getActivity();
-        InitWidget();
+       InitWidget();
         getImage_Server();
+
         return views;
 
     }
@@ -65,6 +75,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         switch (v.getId())
         {
             case R.id.setting_logoutBtn:
+                UserManagement.requestLogout(new LogoutResponseCallback() {
+                    @Override
+                    public void onCompleteLogout() {
+                        //로그아웃 성공 후 하고싶은 내용 코딩 ~
+                    }
+                });
+
                 MySharedPreference pref = new MySharedPreference(getContext());
                 pref.removeAllPreferences("kakao");
                 pref.removeAllPreferences("oneday");
@@ -83,17 +100,19 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         setting_nameTv = (TextView) views.findViewById(R.id.setting_nameTv);
         setting_pushSwc = (Switch) views.findViewById(R.id.setting_pushSwc);
 
-        setting_pushSwc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        setting_pushSwc.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
 
                 MySharedPreference pref = new MySharedPreference(mContext);
 
-                if (isChecked) {
+                if(setting_pushSwc.isChecked()){
+                    setPushSetting_Server(true);
                     Toast.makeText(mContext, "알림 받음", Toast.LENGTH_SHORT).show();
                     pref.setPreferences("fcm", "push", "yes");
                 } else {
-                    Toast.makeText(mContext, "알림 안받음", Toast.LENGTH_SHORT).show();
+                    setPushSetting_Server(false);
+                     Toast.makeText(mContext, "알림 안받음", Toast.LENGTH_SHORT).show();
                     pref.setPreferences("fcm", "push", "no");
                 }
             }
@@ -107,12 +126,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     }
 
     /***************  image 가져오기  *********************/
-
     public Bitmap byteArrayToBitmap(byte[] byteArray ) {  // byte -> bitmap 변환 및 반환
         Bitmap bitmap = BitmapFactory.decodeByteArray( byteArray, 0, byteArray.length ) ;
         return bitmap ;
     }
-
 
     void getImage_Server() {
         MySharedPreference pref = new MySharedPreference(mContext);
@@ -123,7 +140,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         AsyncHttpClient client = new AsyncHttpClient();
 
-        Log.d("SUN", "getImage_Server()");
+        Log.d("SUN", "SettingFragment # getImage_Server()");
         client.get(url,  new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {            }
@@ -147,5 +164,47 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             public void onRetry(int retryNo) {    }
         });
     }
+
+
+    /*************** Push 설정값 전송  *********************/
+    void setPushSetting_Server(boolean pushSet) {
+        RequestParams params  = new RequestParams();
+        params.put("",pushSet);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        Log.d("SUN", "SettingFragment # setPushSetting_Server()");
+        client.get("http://52.78.88.51:8080/OnePercentServer/votenumber.do",params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                //  Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+
+                String res = new String(response);
+                try {
+                    JSONObject object = new JSONObject(res);
+                   // String objStr = object.get("vote_result") + "";
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("SUN", "e : " + e.toString());
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers.toString() + " , error : " + error.toString());
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
 
 }

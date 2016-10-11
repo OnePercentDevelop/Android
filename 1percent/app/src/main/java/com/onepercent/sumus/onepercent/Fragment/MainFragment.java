@@ -31,7 +31,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -50,10 +52,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View views;
     public Context mContext;
     LinearLayout main_exampleLayout;
-    TextView main_gifticonTv, main_voterCountTv, main_questionTv, main_beforePrizeTv;
+    TextView main_gifticonTv, main_voterCountTv, main_questionTv, main_beforePrizeTv, main_clockTv;
     ScrollView scrollView;
 
     int scrollY = 0;
+
+    String today_YYYYMMDD;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,6 +69,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         long nowdate = System.currentTimeMillis(); // 현재시간
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         String now = df.format(nowdate);
+        today_YYYYMMDD = now;
+
+        ClockSet();
 
         MySharedPreference pref = new MySharedPreference(mContext);
         String today = pref.getPreferences("oneday","today");
@@ -86,12 +93,44 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void ClockSet(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+        Date base_date = null;
+        long base_time, now_time, gap_time;
+
+        try {
+            base_date = df.parse(today_YYYYMMDD+" 22:00:00"); // 기준시간
+            base_time =  base_date.getTime(); // data 시간을 long 형으로
+            now_time = System.currentTimeMillis(); // 현재시간
+
+            gap_time = (base_time -now_time) / 1000; // 기준 - 현재 시간  (초단위)
+
+
+            long hourGap = gap_time / 60 / 60 ;
+            long reminder = ((long)(gap_time / 60)) % 60;
+            long minGap = reminder;
+            long secGap = gap_time % 60;
+
+            String resultTime = String.format("%02d", hourGap) + ":" +  String.format("%02d", minGap) + ":" +  String.format("%02d", secGap);
+            //Log.d("SUN", "MainFragment # resultTime : " +resultTime);
+            main_clockTv.setText(resultTime);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     void InitWidget() {
         mContext = getContext();
         main_gifticonTv = (TextView) views.findViewById(R.id.main_gifticonTv);
         main_voterCountTv = (TextView) views.findViewById(R.id.main_voterCountTv);
         main_questionTv = (TextView) views.findViewById(R.id.main_questionTv);
         main_beforePrizeTv = (TextView) views.findViewById(R.id.main_beforePrizeTv);
+        main_clockTv = (TextView) views.findViewById(R.id.main_clockTv);
+
         main_exampleLayout = (LinearLayout) views.findViewById(R.id.main_exampleLayout);
         scrollView = (ScrollView) views.findViewById(R.id.scrollView);
 
@@ -103,7 +142,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     int action = event.getAction();
                     switch (action) {
                         case DragEvent.ACTION_DRAG_STARTED:
+
+                            ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
                             getVoteNumber_Server();
+                            ClockSet();
                             break;
                         case DragEvent.ACTION_DRAG_ENTERED:
                             break;

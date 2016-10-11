@@ -32,14 +32,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     ImageButton login_loginBtn;
     EditText login_idEt;
-
-    public String AUTH_KEY_FCM = "AIzaSyCxE2vBXE_-3aWxKO62K9-caos_6iauXTk";
-    public String  API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
-    public String  REG_ID_FCM = "dSnl0LXOBAA:APA91bH30JEu6csMBroqVgZXrX_aovOBW9kZJJ8QMJH1X95iaqrmpozxw3LPUKdsFOKvVCHHLx0jVUwjjzSp1z6RYbN1SCFtcLO68BVHq-hV5hoVmYIABArA7DbZOVdRrwEfQ4FJIXr9";
-
     Context mContext;
-
-    SessionCallback callback;
+   SessionCallback callback;
 
 
     @Override

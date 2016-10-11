@@ -14,13 +14,16 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.onepercent.sumus.onepercent.MainActivity;
+import com.onepercent.sumus.onepercent.PopupActivity;
 import com.onepercent.sumus.onepercent.R;
+import com.onepercent.sumus.onepercent.SplashActivity;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -39,6 +42,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Log.d("SUN","title : " + title + " / msg : "+ msg);
         sendPushNotification(remoteMessage.getData().get("message"));
         String from = remoteMessage.getFrom();
+
+        Intent intent_ = new Intent(((SplashActivity)SplashActivity.mContext), PopupActivity.class);
+        intent_.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);   // 이거 안해주면 안됨
+        ((SplashActivity)SplashActivity.mContext).startActivity(intent_);
 
     }
 
@@ -73,8 +80,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         wakelock.acquire(5000);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-    }
 
+
+
+    }
 
 
 }
