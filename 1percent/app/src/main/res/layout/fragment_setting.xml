@@ -6,6 +6,23 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!--   사용자 프로필 사진   -->
+    <com.onepercent.sumus.onepercent.Object.MyCircleImageView
+        android:id="@+id/setting_profileImg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorTran" />
+
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/setting_nameTv"
+        android:text="님"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/setting_logoutBtn"
         android:text="로그아웃"

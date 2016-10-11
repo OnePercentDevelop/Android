@@ -57,6 +57,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         views = inflater.inflate(R.layout.fragment_main, container, false);
+        mContext = getContext();
         InitWidget();
 
 
@@ -128,22 +129,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         main_beforePrizeTv.setText( pref.getPreferences("oneday","winner"));
 
         for (int z = 1; z <= 4; z++) {
-            LinearLayout layout = new LinearLayout(mContext);
-            layout.setOrientation(LinearLayout.HORIZONTAL);
-            layout.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-            layout.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            layoutParams.gravity= Gravity.CENTER;
+
+
             Button exampleBtn = new Button(mContext);
             exampleBtn.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-            exampleBtn.setText(pref.getPreferences("oneday","ex"+z));
+            exampleBtn.setText((z) + ". " +pref.getPreferences("oneday","ex"+z));
+            exampleBtn.setLayoutParams(layoutParams);
 
-            layout.addView(exampleBtn);
+
+            main_exampleLayout.addView(exampleBtn);
 
             if(z<4) {
+                LinearLayout.LayoutParams layParams = new LinearLayout.LayoutParams(   0,     LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.gravity= Gravity.CENTER;
                 ImageView line = new ImageView(mContext);
                 line.setBackground(getResources().getDrawable(R.mipmap.btn_line));
-                layout.addView(line);
+                line.setLayoutParams(layoutParams);
+                main_exampleLayout.addView(line);
             }
-            main_exampleLayout.addView(layout);
+
         }
     }
 
@@ -193,23 +202,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                             JSONObject exObj = (JSONObject) exArr.get(0);
                             String ex = (String) exObj.get(z + "");
 
-                            LinearLayout layout = new LinearLayout(mContext);
-                            layout.setOrientation(LinearLayout.HORIZONTAL);
-                            layout.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-                            layout.setGravity(Gravity.CENTER);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+                            layoutParams.gravity= Gravity.CENTER;
+
+
                             Button exampleBtn = new Button(mContext);
                             exampleBtn.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                            exampleBtn.setLayoutParams(layoutParams);
                             exampleBtn.setText((z) + ". " + ex);
 
                             pref.setPreferences("oneday","ex"+z, ex);
-                            layout.addView(exampleBtn);
 
+
+                            main_exampleLayout.addView(exampleBtn);
                             if(z<4) {
+                                LinearLayout.LayoutParams layParams = new LinearLayout.LayoutParams(   1,     LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                                layoutParams.gravity= Gravity.CENTER;
                                 ImageView line = new ImageView(mContext);
                                 line.setBackground(getResources().getDrawable(R.mipmap.btn_line));
-                                layout.addView(line);
+                                line.setLayoutParams(layoutParams);
+                                main_exampleLayout.addView(line);
                             }
-                            main_exampleLayout.addView(layout);
                         }
 
                     }
