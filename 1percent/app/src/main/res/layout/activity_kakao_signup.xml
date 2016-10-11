@@ -7,4 +7,13 @@
     android:background="@color/colorPrimary"
     tools:context="com.onepercent.sumus.onepercent.Kakao.KakaoSignupActivity">
 
+    <ProgressBar
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@color/colorPoint"
+        android:progressTint="@color/colorPoint"
+        android:id="@+id/progresscircle"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.onepercent.sumus.onepercent.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,15 +41,19 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     */
 
     Context mContext;
+    Activity mAcitivity;
     View views;
     Button setting_logoutBtn;
     ImageView setting_profileImg;
     TextView setting_nameTv;
+    Switch setting_pushSwc;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         views =  inflater.inflate(R.layout.fragment_setting, container, false);
         mContext = getContext();
+        mAcitivity = getActivity();
         InitWidget();
         getImage_Server();
         return views;
@@ -61,21 +68,43 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 MySharedPreference pref = new MySharedPreference(getContext());
                 pref.removeAllPreferences("kakao");
                 pref.removeAllPreferences("oneday");
-                Toast.makeText(((SplashActivity)SplashActivity.mContext),"로그아웃",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                Toast.makeText(mAcitivity,"로그아웃",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(mAcitivity, LoginActivity.class));
                 getActivity().finish();
                 break;
         }
     }
 
-    void InitWidget(){
-        setting_logoutBtn = (Button)views.findViewById(R.id.setting_logoutBtn);
+    void InitWidget() {
+        setting_logoutBtn = (Button) views.findViewById(R.id.setting_logoutBtn);
         setting_logoutBtn.setOnClickListener(this);
 
-        setting_profileImg = (ImageView)views.findViewById(R.id.setting_profileImg);
+        setting_profileImg = (ImageView) views.findViewById(R.id.setting_profileImg);
         setting_nameTv = (TextView) views.findViewById(R.id.setting_nameTv);
-    }
+        setting_pushSwc = (Switch) views.findViewById(R.id.setting_pushSwc);
 
+        setting_pushSwc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                MySharedPreference pref = new MySharedPreference(mContext);
+
+                if (isChecked) {
+                    Toast.makeText(mContext, "알림 받음", Toast.LENGTH_SHORT).show();
+                    pref.setPreferences("fcm", "push", "yes");
+                } else {
+                    Toast.makeText(mContext, "알림 안받음", Toast.LENGTH_SHORT).show();
+                    pref.setPreferences("fcm", "push", "no");
+                }
+            }
+        });
+
+        MySharedPreference pref = new MySharedPreference(mContext);
+        if (pref.getPreferences("fcm", "push").equals("yes"))
+            setting_pushSwc.setChecked(true);
+        else
+            setting_pushSwc.setChecked(false);
+    }
 
     /***************  image 가져오기  *********************/
 

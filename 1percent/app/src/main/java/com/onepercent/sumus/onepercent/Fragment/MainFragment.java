@@ -1,6 +1,7 @@
 package com.onepercent.sumus.onepercent.Fragment;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -138,6 +139,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             Button exampleBtn = new Button(mContext);
             exampleBtn.setBackgroundColor(getResources().getColor(R.color.colorWhite));
             exampleBtn.setText((z) + ". " +pref.getPreferences("oneday","ex"+z));
+            exampleBtn.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+            exampleBtn.setTextSize(25/mContext.getResources().getDisplayMetrics().scaledDensity); // PX -> SP로 변환
             exampleBtn.setLayoutParams(layoutParams);
 
 
@@ -157,7 +160,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     void getMain_Server() {
-
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "MainFragment # getMain_Server()");
         client.get("http://52.78.88.51:8080/OnePercentServer/main.do", new AsyncHttpResponseHandler() {
@@ -211,6 +213,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                             Button exampleBtn = new Button(mContext);
                             exampleBtn.setBackgroundColor(getResources().getColor(R.color.colorWhite));
                             exampleBtn.setLayoutParams(layoutParams);
+                            exampleBtn.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+                            exampleBtn.setTextSize(25/mContext.getResources().getDisplayMetrics().scaledDensity); // PX -> SP로 변환
                             exampleBtn.setText((z) + ". " + ex);
 
                             pref.setPreferences("oneday","ex"+z, ex);
@@ -234,6 +238,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                     Log.d("SUN", "e : " + e.toString());
                 }
+
+
             }
 
             @Override
@@ -250,6 +256,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     void getVoteNumber_Server() {
 
+        ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "MainFragment # getVoteNumber_Server()");
         client.get("http://52.78.88.51:8080/OnePercentServer/votenumber.do", new AsyncHttpResponseHandler() {
@@ -278,6 +285,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                     Log.d("SUN", "e : " + e.toString());
                 }
+
+                ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.GONE);
             }
 
             @Override

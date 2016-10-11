@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import java.text.SimpleDateFormat;
 
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     public ViewPager mViewPager;
     TabLayout tabLayout;
 
+   public ProgressBar progresscircle ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +39,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentSetting();
         InitWidget();
 
+
     }
 
+    /*
+    public void onWindowFocusChanged(boolean hasFocus) {
+        Log.d("SUN", "TAB layout " + String.valueOf(tabLayout.getHeight()));
+    }*/
 
 
     // Fragment adapter
@@ -86,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void FragmentSetting() {
+
+        progresscircle = (ProgressBar) findViewById(R.id.progresscircle);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         tabLayout = (TabLayout) findViewById(R.id.tabs);

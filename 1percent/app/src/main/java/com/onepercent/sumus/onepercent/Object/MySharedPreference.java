@@ -3,6 +3,7 @@ package com.onepercent.sumus.onepercent.Object;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * Created by MINI on 2016-10-09.
@@ -43,6 +44,7 @@ public class MySharedPreference {
 
     // 값(ALL Data) 삭제하기
     public void removeAllPreferences(String preName){
+        Log.d("SUN","MySharedPreference # "+preName + " is removeAll");
         SharedPreferences pref = mContext.getSharedPreferences(preName, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();

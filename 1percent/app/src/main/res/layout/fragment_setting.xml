@@ -9,8 +9,8 @@
     <!--   사용자 프로필 사진   -->
     <com.onepercent.sumus.onepercent.Object.MyCircleImageView
         android:id="@+id/setting_profileImg"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:background="@color/colorTran" />
@@ -19,15 +19,27 @@
         android:layout_gravity="center"
         android:id="@+id/setting_nameTv"
         android:text="님"
+        android:fontFamily="sans-serif"
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <Switch
+        android:text="PUSH 알림 수신"
+        android:layout_gravity="center"
+        android:id="@+id/setting_pushSwc"
+        android:layout_width="wrap_content"
+        android:fontFamily="sans-serif"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content" />
+
     <Button
+
         android:id="@+id/setting_logoutBtn"
         android:text="로그아웃"
         android:layout_gravity="center"
-        android:background="@color/colorPoint"
+        android:fontFamily="sans-serif"
+        android:background="@drawable/layout_radius"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>

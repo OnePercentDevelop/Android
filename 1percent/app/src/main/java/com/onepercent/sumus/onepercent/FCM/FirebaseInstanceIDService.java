@@ -32,6 +32,7 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         MySharedPreference pref = new MySharedPreference(((SplashActivity)SplashActivity.mContext));
         pref.setPreferences("fcm","device",deviceToken);
+        pref.setPreferences("fcm","push","yes");
 
     }
 
