@@ -1,5 +1,6 @@
 package com.onepercent.sumus.onepercent.Fragment;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -94,6 +97,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     public void ClockSet(){
+
+        Log.d("SUN", "MainFragment # ClockSet()");
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         Date base_date = null;
         long base_time, now_time, gap_time;
@@ -143,7 +148,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     switch (action) {
                         case DragEvent.ACTION_DRAG_STARTED:
 
-                            ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
+                           ((MainActivity)MainActivity.mContext).ThreadFlag = true;
                             getVoteNumber_Server();
                             ClockSet();
                             break;
@@ -298,7 +303,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     void getVoteNumber_Server() {
 
-        ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
+        //((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "MainFragment # getVoteNumber_Server()");
         client.get("http://52.78.88.51:8080/OnePercentServer/votenumber.do", new AsyncHttpResponseHandler() {
@@ -328,7 +333,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     Log.d("SUN", "e : " + e.toString());
                 }
 
-                ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.GONE);
+             //   ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.GONE);
             }
 
             @Override

@@ -1,5 +1,6 @@
 package com.onepercent.sumus.onepercent.Fragment;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

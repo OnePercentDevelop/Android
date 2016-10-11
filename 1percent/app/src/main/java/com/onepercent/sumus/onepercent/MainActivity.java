@@ -1,6 +1,10 @@
 package com.onepercent.sumus.onepercent;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
    public ProgressBar progresscircle ;
 
+    public  BackThread thread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentSetting();
         InitWidget();
 
+        thread = new BackThread();
+        thread.setDaemon(true);
+        thread.start();
 
     }
 
@@ -145,5 +156,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    int ThreadValue = 0;
+    public  Boolean ThreadFlag = true;
+    class BackThread extends Thread{
+        @Override
+        public void run() {
+            //Log.d("SUN","run ThreadFlag : " +ThreadFlag);
+            while(true){
+                try {
 
+                    ThreadValue++;
+                    if(ThreadFlag){
+                       // Log.d("SUN","THREAD : " +ThreadValue);
+                        handler.sendEmptyMessage(0);
+                    }
+
+                    if (ThreadValue >= 2) {
+                            ThreadFlag = false;
+                            handler.sendEmptyMessage(1);
+                            ThreadValue = 0;
+                    }
+
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } // end while
+        } // end run()
+    } // end class BackThread
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            //Log.d("SUN","Message : " +msg.what);
+            if(msg.what == 0 ){   // Message id 가 0 이면
+               progresscircle.setVisibility(View.VISIBLE);
+            }
+            else if(msg.what == 1 )
+                progresscircle.setVisibility(View.GONE);
+        }
+    };
 }

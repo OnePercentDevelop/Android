@@ -21,21 +21,21 @@
 
         <android.support.v4.view.ViewPager
             android:id="@+id/container"
-            android:layout_below="@id/tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/tabs"
             android:background="@color/colorLightGray"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <ProgressBar
-            android:indeterminateTint="@color/colorPoint"
-            android:progressTint="@color/colorPoint"
-            android:layout_marginTop="50dp"
             android:id="@+id/progresscircle"
-
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_marginTop="50dp"
+            android:indeterminateTint="@color/colorPoint"
+            android:max="500"
+            android:progress="0"
+            android:progressTint="@color/colorPoint"
+            android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>
