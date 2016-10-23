@@ -31,6 +31,10 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PopupActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
 
         <!-- kakao -->
         <meta-data
@@ -51,10 +55,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".PopupActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            ></activity>
+        <activity android:name=".JoinActivity"></activity>
     </application>
 
 </manifest>

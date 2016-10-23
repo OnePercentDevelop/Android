@@ -16,7 +16,7 @@
         android:layout_weight="5"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="1 P E R C E N T"
+        android:text="J O I N"
         android:textColor="@color/colorWhite"
         android:textSize="20sp" />
 
@@ -30,44 +30,77 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/login_idEt"
+            android:id="@+id/join_idEt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@mipmap/input_back"
+            android:fontFamily="sans-serif"
             android:hint="아이디"
             android:singleLine="true"
-            android:fontFamily="sans-serif"
             android:paddingLeft="20dp" />
 
         <EditText
-            android:id="@+id/login_pwdEt"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:id="@+id/join_pwdEt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@mipmap/input_back"
             android:fontFamily="sans-serif"
             android:hint="비밀번호"
-            android:singleLine="true"
-            android:inputType="textPassword"
             android:paddingLeft="20dp" />
 
-        <ImageButton
-            android:id="@+id/login_loginBtn"
+        <EditText
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:id="@+id/join_pwd1Et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/colorTran"
+            android:background="@mipmap/input_back"
             android:fontFamily="sans-serif"
-            android:src="@mipmap/login_before" />
+            android:hint="비밀번호확인"
+            android:paddingLeft="20dp" />
 
-        <com.kakao.usermgmt.LoginButton
-            android:visibility="gone"
-            android:id="@+id/com_kakao_login"
+        <TextView
+            android:visibility="invisible"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/join_pwdCheckTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="비밀번호가 일치합니다." />
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"/>
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/join_cancleBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/layout_radius"
+                android:fontFamily="sans-serif"
+                android:text="취소" />
+
+            <Button
+                android:id="@+id/join_joinBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/layout_radius"
+                android:fontFamily="sans-serif"
+                android:text="가입" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -80,27 +113,7 @@
         android:layout_weight="2"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:text="계정이 없으신가요?     "
-            android:textColor="#e6e6e6"
-            android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/login_joinTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:text="가입하기"
-            android:textColor="#e6e6e6"
-            android:textSize="12sp"
-            android:textStyle="normal|bold" />
     </LinearLayout>
 
 </LinearLayout>

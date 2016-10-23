@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -31,7 +32,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     */
 
     ImageButton login_loginBtn;
-    EditText login_idEt;
+    EditText login_idEt, login_pwdEt;
+    TextView login_joinTv;
     Context mContext;
    SessionCallback callback;
 
@@ -45,15 +47,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mContext = this;
 
         InitWidget();
-        KakaoSetting();
+       // KakaoSetting();
         FCMSetting();
 
     }
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch(v.getId()){
             case R.id.login_loginBtn:
+                MySharedPreference pref = new MySharedPreference(getApplicationContext());
+                pref.setPreferences("user","userID",login_idEt.getText().toString());
+                pref.setPreferences("user","userPWD",login_pwdEt.getText().toString());
+
+                intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.login_joinTv:
+                intent = new Intent(getApplicationContext(),JoinActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
     }
@@ -62,6 +77,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login_loginBtn = (ImageButton)findViewById(R.id.login_loginBtn);
         login_loginBtn.setOnClickListener(this);
         login_idEt = (EditText)findViewById(R.id.login_idEt);
+        login_pwdEt = (EditText)findViewById(R.id.login_pwdEt);
+        login_joinTv = (TextView)findViewById(R.id.login_joinTv);
+        login_joinTv.setOnClickListener(this);
     }
 
     void KakaoSetting(){

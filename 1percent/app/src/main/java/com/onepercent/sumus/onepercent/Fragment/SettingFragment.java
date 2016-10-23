@@ -52,11 +52,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     Context mContext;
     Activity mAcitivity;
     View views;
-    Button setting_logoutBtn;
+    Button setting_logoutBtn, setting_loginBtn;
     ImageView setting_profileImg;
     TextView setting_nameTv;
     Switch setting_pushSwc;
+    MySharedPreference pref;
 
+    String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,8 +66,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         views =  inflater.inflate(R.layout.fragment_setting, container, false);
         mContext = getContext();
         mAcitivity = getActivity();
-       InitWidget();
-        getImage_Server();
+       // getImage_Server();
+        pref = new MySharedPreference(mContext);
+        userId = pref.getPreferences("user","userID");
+
+
+        InitWidget();
+
 
         return views;
 
@@ -76,19 +83,23 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         switch (v.getId())
         {
             case R.id.setting_logoutBtn:
-                UserManagement.requestLogout(new LogoutResponseCallback() {
-                    @Override
-                    public void onCompleteLogout() {
-                        //로그아웃 성공 후 하고싶은 내용 코딩 ~
-                    }
-                });
+//                UserManagement.requestLogout(new LogoutResponseCallback() {
+//                    @Override
+//                    public void onCompleteLogout() {
+//                        //로그아웃 성공 후 하고싶은 내용 코딩 ~
+//                    }
+//                });
 
                 MySharedPreference pref = new MySharedPreference(getContext());
-                pref.removeAllPreferences("kakao");
+                pref.removeAllPreferences("user");
                 pref.removeAllPreferences("oneday");
                 Toast.makeText(mAcitivity,"로그아웃",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(mAcitivity, MainActivity.class));
+                mAcitivity.finish();
+                break;
+            case R.id.setting_loginBtn:
                 startActivity(new Intent(mAcitivity, LoginActivity.class));
-                getActivity().finish();
+                mAcitivity.finish();
                 break;
         }
     }
@@ -96,6 +107,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     void InitWidget() {
         setting_logoutBtn = (Button) views.findViewById(R.id.setting_logoutBtn);
         setting_logoutBtn.setOnClickListener(this);
+        setting_loginBtn = (Button) views.findViewById(R.id.setting_loginBtn);
+        setting_loginBtn.setOnClickListener(this);
 
         setting_profileImg = (ImageView) views.findViewById(R.id.setting_profileImg);
         setting_nameTv = (TextView) views.findViewById(R.id.setting_nameTv);
@@ -119,11 +132,21 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        MySharedPreference pref = new MySharedPreference(mContext);
         if (pref.getPreferences("fcm", "push").equals("yes"))
             setting_pushSwc.setChecked(true);
         else
             setting_pushSwc.setChecked(false);
+
+        if(!userId.equals("")){
+            setting_nameTv.setText(userId+"님 환영합니다");
+            setting_loginBtn.setVisibility(View.GONE);
+            setting_logoutBtn.setVisibility(View.VISIBLE);
+        }
+        else {
+            setting_nameTv.setText("비회원님 환영합니다.");
+            setting_loginBtn.setVisibility(View.VISIBLE);
+            setting_logoutBtn.setVisibility(View.GONE);
+        }
     }
 
     /***************  image 가져오기  *********************/

@@ -13,6 +13,7 @@
         android:layout_height="130dp"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
+        android:src="@mipmap/profile_basic"
         android:background="@color/colorTran" />
 
     <TextView
@@ -37,6 +38,17 @@
 
         android:id="@+id/setting_logoutBtn"
         android:text="로그아웃"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif"
+        android:background="@drawable/layout_radius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/setting_loginBtn"
+        android:text="로그인"
         android:layout_gravity="center"
         android:fontFamily="sans-serif"
         android:background="@drawable/layout_radius"

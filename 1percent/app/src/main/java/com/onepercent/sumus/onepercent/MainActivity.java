@@ -13,15 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment;
 
 import java.text.SimpleDateFormat;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     /*
     (f) InitWidget : 위젯 초기 설정
     (f) FragmentSetting : TabLayout & Viewpager 사용 위한 Fragment 설정
@@ -34,10 +40,13 @@ public class MainActivity extends AppCompatActivity {
     public ViewPager mViewPager;
     TabLayout tabLayout;
 
-   public ProgressBar progresscircle ;
 
+    public ProgressBar progresscircle ;
     public  BackThread thread;
 
+
+    PrizeResultFragment prizeResultFragment;
+    FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
     // Fragment adapter
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
         public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+                      super(fm);
         }
 
+        public void webViewBack(){
+            new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment().webVeiwBack();
+        }
         @Override
         public Fragment getItem(int position) {
 
@@ -76,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     return new com.onepercent.sumus.onepercent.Fragment.MainFragment();
                 case 2:
                     return new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment();
-
+                case 3:
+                    return new  com.onepercent.sumus.onepercent.Fragment.QuestionFragment();
             }
             return null;
         }
@@ -95,9 +107,13 @@ public class MainActivity extends AppCompatActivity {
                     return "홈";
                 case 2:
                     return "당첨자";
+                case 3:
+                    return "질문";
             }
             return null;
         }
+
+
 
     }
 
@@ -107,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     void FragmentSetting() {
 
         progresscircle = (ProgressBar) findViewById(R.id.progresscircle);
-
+        fragmentManager = getSupportFragmentManager();
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -148,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.home_btn));
                         tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.select_prize_btn));
                         break;
+
                 }
             }
 
@@ -158,26 +175,28 @@ public class MainActivity extends AppCompatActivity {
 
     int ThreadValue = 0;
     public  Boolean ThreadFlag = true;
+    public Boolean RunFlag = true;
     class BackThread extends Thread{
         @Override
         public void run() {
             //Log.d("SUN","run ThreadFlag : " +ThreadFlag);
-            while(true){
+            while(RunFlag){
                 try {
 
+                    //Log.d("SUN","current page : " +mViewPager.getCurrentItem());
                     ThreadValue++;
                     if(ThreadFlag){
-                       // Log.d("SUN","THREAD : " +ThreadValue);
+                        // Log.d("SUN","THREAD : " +ThreadValue);
                         handler.sendEmptyMessage(0);
                     }
 
                     if (ThreadValue >= 2) {
-                            ThreadFlag = false;
-                            handler.sendEmptyMessage(1);
-                            ThreadValue = 0;
+                        ThreadFlag = false;
+                        handler.sendEmptyMessage(1);
+                        ThreadValue = 0;
                     }
 
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -190,10 +209,45 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             //Log.d("SUN","Message : " +msg.what);
             if(msg.what == 0 ){   // Message id 가 0 이면
-               progresscircle.setVisibility(View.VISIBLE);
+                progresscircle.setVisibility(View.VISIBLE);
             }
             else if(msg.what == 1 )
                 progresscircle.setVisibility(View.GONE);
         }
     };
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if((keyCode == KeyEvent.KEYCODE_BACK) &&   mViewPager.getCurrentItem() == 2 )
+        {
+//            prizeResultFragment = (PrizeResultFragment)fragmentManager.findFragmentById(mSectionsPagerAdapter.getItem(2).getId());
+//            prizeResultFragment.webVeiwBack();
+            new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment().webVeiwBack();
+//            if( prizeResultFragment.mWebView.canGoBack())
+//                prizeResultFragment.mWebView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RunFlag = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RunFlag = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RunFlag = false;
+    }
 }

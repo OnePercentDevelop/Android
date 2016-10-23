@@ -1,23 +1,20 @@
 package com.onepercent.sumus.onepercent.Fragment;
 
-import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.EditText;
-import android.os.Handler;
-import android.os.Message;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -26,6 +23,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.onepercent.sumus.onepercent.LoginActivity;
 import com.onepercent.sumus.onepercent.MainActivity;
 import com.onepercent.sumus.onepercent.Object.MySharedPreference;
 import com.onepercent.sumus.onepercent.R;
@@ -50,41 +48,52 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     (f) getMain_Server : 오늘의 data 서버 연동
     (f) getVoteNumber_Server : 현재 투표자수 서버 연동
     (f) getMain_Reload : 오늘의 data 가 이미 있으면 저장된 값을 로드
+    (f) ClockSet : 남은 시간 계산
     */
 
+    // fragment
     public View views;
     public Context mContext;
-    LinearLayout main_exampleLayout;
+    public Activity mActivity;
+
+
+    // widget
+    LinearLayout main_exampleLayout, main_questionLayout;
     TextView main_gifticonTv, main_voterCountTv, main_questionTv, main_beforePrizeTv, main_clockTv;
     ScrollView scrollView;
 
-    int scrollY = 0;
 
     String today_YYYYMMDD;
+    MySharedPreference pref;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         views = inflater.inflate(R.layout.fragment_main, container, false);
         mContext = getContext();
+        mActivity = getActivity();
         InitWidget();
+
 
 
         long nowdate = System.currentTimeMillis(); // 현재시간
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         String now = df.format(nowdate);
-        today_YYYYMMDD = now;
+        today_YYYYMMDD = now; // 오늘날짜 계산 및 변환
 
-        ClockSet();
+        ClockSet(); // 남은 시간 계싼
 
-        MySharedPreference pref = new MySharedPreference(mContext);
-        String today = pref.getPreferences("oneday","today");
 
-       if(now.equals(today)) // oneday data 이미
-           getMain_Reload();
-        else // oneday data 아직
+        pref = new MySharedPreference(mContext);
+        String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
+
+
+        if(now.equals(today)) // oneday data 이미
+            getMain_Reload();
+        else                  // oneday data 아직
             getMain_Server();
 
-        getVoteNumber_Server();
+        getVoteNumber_Server(); // 투표자수 갱신
         return views;
 
     }
@@ -92,7 +101,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case  R.id.main_questionLayout:
+                if(pref.getPreferences("user","userID").equals("")){
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent);
+                    mActivity.finish();
+                }
+                else{
+                    Toast.makeText(mActivity,"질문선택",Toast.LENGTH_SHORT).show();
+                }
 
+
+                break;
         }
     }
 
@@ -107,9 +127,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             base_date = df.parse(today_YYYYMMDD+" 22:00:00"); // 기준시간
             base_time =  base_date.getTime(); // data 시간을 long 형으로
             now_time = System.currentTimeMillis(); // 현재시간
-
             gap_time = (base_time -now_time) / 1000; // 기준 - 현재 시간  (초단위)
-
 
             long hourGap = gap_time / 60 / 60 ;
             long reminder = ((long)(gap_time / 60)) % 60;
@@ -117,9 +135,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             long secGap = gap_time % 60;
 
             String resultTime = String.format("%02d", hourGap) + ":" +  String.format("%02d", minGap) + ":" +  String.format("%02d", secGap);
-            //Log.d("SUN", "MainFragment # resultTime : " +resultTime);
             main_clockTv.setText(resultTime);
-
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -137,6 +153,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         main_clockTv = (TextView) views.findViewById(R.id.main_clockTv);
 
         main_exampleLayout = (LinearLayout) views.findViewById(R.id.main_exampleLayout);
+        main_questionLayout = (LinearLayout) views.findViewById(R.id.main_questionLayout);
+        main_questionLayout.setOnClickListener(this);
         scrollView = (ScrollView) views.findViewById(R.id.scrollView);
 
         scrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -148,23 +166,22 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     switch (action) {
                         case DragEvent.ACTION_DRAG_STARTED:
 
-                           ((MainActivity)MainActivity.mContext).ThreadFlag = true;
+                        case DragEvent.ACTION_DRAG_ENTERED:
+
+                        case DragEvent.ACTION_DRAG_EXITED:
+
+                        case DragEvent.ACTION_DROP:
+
+                        case DragEvent.ACTION_DRAG_ENDED:
+                            ((MainActivity)MainActivity.mContext).ThreadFlag = true;
                             getVoteNumber_Server();
                             ClockSet();
-                            break;
-                        case DragEvent.ACTION_DRAG_ENTERED:
-                            break;
-                        case DragEvent.ACTION_DRAG_EXITED:
-                            break;
-                        case DragEvent.ACTION_DROP:
-                            break;
-                        case DragEvent.ACTION_DRAG_ENDED:
                             break;
                         default:
                             break;
                     }
                 }
-                    return false;
+                return false;
             }
         });
 
@@ -217,7 +234,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-               // Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+                // Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
 
                 String res = new String(response);
                 try {
@@ -314,7 +331,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-              //  Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+                //  Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
 
                 String res = new String(response);
                 try {
@@ -333,7 +350,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     Log.d("SUN", "e : " + e.toString());
                 }
 
-             //   ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.GONE);
+                //   ((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.GONE);
             }
 
             @Override
@@ -346,5 +363,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
 
 }

@@ -1,5 +1,6 @@
 package com.onepercent.sumus.onepercent.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,13 +21,20 @@ public class QuestionFragment  extends Fragment implements View.OnClickListener 
     (f) InitWidget : 위젯 초기 설정\
     */
 
+    // fragment
     View views;
-    ImageButton question_leftBtn;
     Context mContext;
+    Activity mActivity;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         views = inflater.inflate(R.layout.fragment_question, container, false);
+
+        mContext = getContext();
+        mActivity = getActivity();
+
         InitWidget();
 
         return views;
@@ -37,14 +45,10 @@ public class QuestionFragment  extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.question_leftBtn:
-                ((MainActivity)MainActivity.mContext).mViewPager.setCurrentItem(1);
-                break;
         }
     }
 
     void InitWidget(){
-        question_leftBtn = (ImageButton) views.findViewById(R.id.question_leftBtn);
-        question_leftBtn.setOnClickListener(this);
+
     }
 }

@@ -72,6 +72,7 @@
 
             <!-- 오늘의 질문 레이아웃 -->
             <LinearLayout
+                android:id="@+id/main_questionLayout"
                 android:background="@drawable/bottom_line"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"

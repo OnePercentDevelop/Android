@@ -5,9 +5,17 @@
     <color name="colorAccent">#efdecc</color>
     <color name="colorPoint">#EBA051</color>
 
+    <color name="colorViolet"> #8374C8 </color>
+
+
+
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorTran">#000000ff</color>
     <color name="colorDarkGray">#777777</color>
     <color name="colorLightGray">#dddddd</color>
+    <color name="colocRed">#ff0000</color>
+
+
+
 </resources>
