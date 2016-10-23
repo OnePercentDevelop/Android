@@ -82,35 +82,35 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public Fragment getItem(int position) {
 
-            switch (position) {
+            switch (position){
                 case 0:
-                    return new com.onepercent.sumus.onepercent.Fragment.SettingFragment();
-                case 1:
                     return new com.onepercent.sumus.onepercent.Fragment.MainFragment();
+                case 1:
+                    return new  com.onepercent.sumus.onepercent.Fragment.VoteFragment();
                 case 2:
                     return new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment();
                 case 3:
-                    return new  com.onepercent.sumus.onepercent.Fragment.QuestionFragment();
+                    return new com.onepercent.sumus.onepercent.Fragment.SettingFragment();
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "설정";
-                case 1:
                     return "홈";
+                case 1:
+                    return "투표";
                 case 2:
                     return "당첨자";
                 case 3:
-                    return "질문";
+                    return "더보기";
             }
             return null;
         }
@@ -132,14 +132,15 @@ public class MainActivity extends AppCompatActivity{
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPoint));
         tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite),getResources().getColor(R.color.colorWhite));
-        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
-        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.select_home_btn));
+        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.select_home_btn));
+        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.vote_btn));
         tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
-        tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite),getResources().getColor(R.color.colorPoint));
+        tabLayout.getTabAt(3).setIcon(getResources().getDrawable(R.mipmap.more_btn));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite)); // 비선택, 선택
 
-        mViewPager.setCurrentItem(1);
+        //mViewPager.setCurrentItem(0);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
         {
@@ -151,20 +152,29 @@ public class MainActivity extends AppCompatActivity{
             {
                 switch (position)
                 {
-                    case 0: // 설정
-                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.select_setting_btn));
-                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+                    case 0: // 홈
+                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.select_home_btn));
+                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.vote_btn));
                         tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
+                        tabLayout.getTabAt(3).setIcon(getResources().getDrawable(R.mipmap.more_btn));
                         break;
-                    case 1: // 홈
-                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
-                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.select_home_btn));
+                    case 1: // 투표
+                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.select_vote_btn));
                         tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
+                        tabLayout.getTabAt(3).setIcon(getResources().getDrawable(R.mipmap.more_btn));
                         break;
                     case 2: // 당첨자
-                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.setting_btn));
-                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.vote_btn));
                         tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.select_prize_btn));
+                        tabLayout.getTabAt(3).setIcon(getResources().getDrawable(R.mipmap.more_btn));
+                        break;
+                    case 3: // 더보기
+                        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+                        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.vote_btn));
+                        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
+                        tabLayout.getTabAt(3).setIcon(getResources().getDrawable(R.mipmap.select_more_btn));
                         break;
 
                 }
