@@ -22,6 +22,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.onepercent.sumus.onepercent.Fragment.MainFragment;
 import com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     PrizeResultFragment prizeResultFragment;
+    MainFragment mainFragment;
     FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,20 +220,20 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if((keyCode == KeyEvent.KEYCODE_BACK) &&   mViewPager.getCurrentItem() == 2 )
-        {
-//            prizeResultFragment = (PrizeResultFragment)fragmentManager.findFragmentById(mSectionsPagerAdapter.getItem(2).getId());
-//            prizeResultFragment.webVeiwBack();
-            new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment().webVeiwBack();
-//            if( prizeResultFragment.mWebView.canGoBack())
-//                prizeResultFragment.mWebView.goBack();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//
+//        if((keyCode == KeyEvent.KEYCODE_BACK) &&   mViewPager.getCurrentItem() == 2 )
+//        {
+////            prizeResultFragment = (PrizeResultFragment)fragmentManager.findFragmentById(mSectionsPagerAdapter.getItem(2).getId());
+////            prizeResultFragment.webVeiwBack();
+//            new com.onepercent.sumus.onepercent.Fragment.PrizeResultFragment().webVeiwBack();
+////            if( prizeResultFragment.mWebView.canGoBack())
+////                prizeResultFragment.mWebView.goBack();
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     @Override
     protected void onStart() {
@@ -243,6 +245,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         RunFlag = false;
+
     }
 
     @Override

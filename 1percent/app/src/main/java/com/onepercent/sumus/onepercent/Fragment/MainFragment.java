@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.DragEvent;
@@ -66,6 +68,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     String today_YYYYMMDD;
     MySharedPreference pref;
 
+    public TimerThread thread;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,7 +85,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         String now = df.format(nowdate);
         today_YYYYMMDD = now; // 오늘날짜 계산 및 변환
 
-        ClockSet(); // 남은 시간 계싼
+        thread = new TimerThread();
+        thread.setDaemon(true);
+        thread.start();
+
+        //ClockSet(); // 남은 시간 계싼
 
 
         pref = new MySharedPreference(mContext);
@@ -118,7 +126,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void ClockSet(){
 
-        Log.d("SUN", "MainFragment # ClockSet()");
+        //Log.d("SUN", "MainFragment # ClockSet()");
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         Date base_date = null;
         long base_time, now_time, gap_time;
@@ -175,7 +183,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         case DragEvent.ACTION_DRAG_ENDED:
                             ((MainActivity)MainActivity.mContext).ThreadFlag = true;
                             getVoteNumber_Server();
-                            ClockSet();
+                           // ClockSet();
                             break;
                         default:
                             break;
@@ -364,5 +372,45 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    int ints=0;
+    public Boolean RunFlag = true;
+    class TimerThread extends Thread{
 
+        @Override
+        public void run() {
+            while(RunFlag){
+                try {
+
+                   // Log.d("SUN","MainFragment # run TimerThread : " +ints++);
+                        handler.sendEmptyMessage(0);
+
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } // end while
+        } // end run()
+    } // end class BackThread
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            //Log.d("SUN","Message : " +msg.what);
+            ClockSet();
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        RunFlag = true;
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        RunFlag = false;
+    }
 }
