@@ -1,0 +1,149 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragment.MainFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <!-- 시간 레이아웃 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingTop="30dp">
+
+                <LinearLayout
+                    android:paddingTop="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="180dp"
+                    android:layout_height="200dp"
+                    android:background="@mipmap/timer"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/main_gifticonTv"
+                        style="@style/main_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:text="상품" />
+
+                    <TextView
+                        android:id="@+id/main_clockTv"
+                        style="@style/main_clock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:text="00:00:00" />
+
+                    <TextView
+                        android:id="@+id/main_voterCountTv"
+                        style="@style/main_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="0" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <!-- 질문 레이아웃 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/main_questionTv"
+                    style="@style/main_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:text="질문" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/main_ex1Btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="1" />
+
+                    <Button
+                        android:id="@+id/main_ex2Btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="2" />
+
+                    <Button
+                        android:id="@+id/main_ex3Btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="3" />
+
+                    <Button
+                        android:id="@+id/main_ex4Btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="4" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 당첨자 레이아웃 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/main_beforePrizeTv"
+                    style="@style/main_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="지난 당첨자" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

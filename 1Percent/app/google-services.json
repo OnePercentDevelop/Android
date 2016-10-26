@@ -1,0 +1,113 @@
+{
+  "project_info": {
+    "project_number": "564176921683",
+    "firebase_url": "https://percent-60501.firebaseio.com",
+    "project_id": "percent-60501",
+    "storage_bucket": "percent-60501.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564176921683:android:0b1af4c327935008",
+        "android_client_info": {
+          "package_name": "com.onepercent.sumus.onepercent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564176921683-638nl3gi7mcvnfv67h9vksng0s2usv73.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onepercent.sumus.onepercent",
+            "certificate_hash": "2F383B2725220EA2B4005920F2FD1F1AA5F83394"
+          }
+        },
+        {
+          "client_id": "564176921683-2ovl1tbr757fd4l5vlh64p96grp0kb4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA22vzUZ2haThLjOV2J3mU7qaC-lOVXtgk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564176921683-2ovl1tbr757fd4l5vlh64p96grp0kb4d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "564176921683-01lg0jre43e1qmkae69k97r7kk5ghpq2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ios.asb"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564176921683:android:7aff2d1ba8d18040",
+        "android_client_info": {
+          "package_name": "sumus.com.onepercent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564176921683-dobl73hjorgco8v49r7ja37h2l8dqka3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sumus.com.onepercent",
+            "certificate_hash": "2F383B2725220EA2B4005920F2FD1F1AA5F83394"
+          }
+        },
+        {
+          "client_id": "564176921683-2ovl1tbr757fd4l5vlh64p96grp0kb4d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA22vzUZ2haThLjOV2J3mU7qaC-lOVXtgk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564176921683-2ovl1tbr757fd4l5vlh64p96grp0kb4d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "564176921683-01lg0jre43e1qmkae69k97r7kk5ghpq2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ios.asb"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
