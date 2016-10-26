@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import sumus.onepercent.com.onepercent.Fragment.MainFragment;
@@ -25,9 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     TabLayout tabLayout;
+    View actionView;
 
-
-
+    TextView action_titleTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite)); // 비선택, 선택
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){   }
+
+            @Override
+            public void onPageSelected(int position)
+            {
+                switch (position)
+                {
+                    case 0: // 홈
+                        action_titleTv.setText("홈");
+                        break;
+                    case 1: // 투표
+                        action_titleTv.setText("질문");
+                        break;
+                    case 2: // 당첨자
+                        action_titleTv.setText("당첨자");
+                        break;
+                    case 3: // 더보기
+                        action_titleTv.setText("더보기");
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state)  { }
+        });
+
     }
 
     void InitActionBar(){
@@ -63,8 +94,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
 
-        View actionView = getSupportActionBar().getCustomView();
+        actionView = getSupportActionBar().getCustomView();
         actionView.findViewById(R.id.action_moreBtn).setOnClickListener(this);
+        action_titleTv = (TextView) actionView.findViewById(R.id.action_titleTv);
     }
 
     @Override
