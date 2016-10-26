@@ -18,10 +18,7 @@
         <!--    android:layout_height="?attr/actionBarSize" -->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-
-            android:background="@color/colorPoint"
+            style="@style/actionbar"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -40,7 +37,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:tabIndicatorColor="@color/colorLightPoint"
+            app:tabIndicatorColor="@color/colorBlue"
             android:visibility="visible"
             app:tabGravity="fill"
             app:tabTextColor="#000000" />
