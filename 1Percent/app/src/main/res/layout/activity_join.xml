@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/splash_background"
+    tools:context="sumus.com.onepercent.LoginActivity">
+
+    <LinearLayout
+        android:id="@+id/inputLayout"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/join_phoneEt"
+            android:singleLine="true"
+            android:hint="핸드폰번호"
+            android:background="@drawable/layout_radius"
+            android:layout_width="200dp"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/join_pwd1Et"
+            android:singleLine="true"
+            android:hint="비밀번호"
+            android:textSize="15sp"
+            android:background="@drawable/layout_radius"
+            android:layout_width="200dp"
+            android:padding="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/join_pwd2Et"
+            android:singleLine="true"
+            android:hint="비밀번호 확인"
+            android:textSize="15sp"
+            android:background="@drawable/layout_radius"
+            android:layout_width="200dp"
+            android:padding="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/join_pwokTv"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorWhite"
+            android:text=" "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/inputLayout"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/join_cancleBtn"
+            android:text="취소"
+            android:textSize="10sp"
+            android:background="@drawable/layout_radius"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/join_okBtn"
+            android:text="확인"
+            android:textSize="10sp"
+            android:background="@drawable/layout_radius"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp" />
+    </LinearLayout>
+</RelativeLayout>

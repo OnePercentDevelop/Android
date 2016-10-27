@@ -11,10 +11,9 @@ import android.util.Log;
 
 public class MySharedPreference {
      /*
-        kakao : kakao 관련 데이터                           kakaoID, kakaoNickname, kakaoProfileImage
-        oneday : 하루에 한번만 동기화 필요한 데이터            gift,  question, winner, ex1~4
+        oneday : 하루에 한번만 동기화 필요한 데이터            gift,  question, winner, ex1~4, giftImg
         fcm : fcm push 위한 데이터                          device, push
-        user : 회원 로그인 관련 데이터                       userID, userPWD
+        user : 회원 로그인 관련 데이터                       userPhone, userPwd
      */
 
     static Context mContext;

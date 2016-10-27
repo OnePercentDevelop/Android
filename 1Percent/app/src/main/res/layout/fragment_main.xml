@@ -70,6 +70,7 @@
 
             <!-- 질문 레이아웃 -->
             <LinearLayout
+                android:id="@+id/main_QuestionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"

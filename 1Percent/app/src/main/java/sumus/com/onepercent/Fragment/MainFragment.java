@@ -2,6 +2,7 @@ package sumus.com.onepercent.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
+import sumus.com.onepercent.LoginActivity;
+import sumus.com.onepercent.MainActivity;
 import sumus.com.onepercent.Object.MySharedPreference;
 import sumus.com.onepercent.R;
 
@@ -32,11 +38,13 @@ import sumus.com.onepercent.R;
 public class MainFragment extends Fragment implements View.OnClickListener {
      /*
     (f) InitWidget : 위젯 초기 설정
+    (f) InitData : 기본 데이터 로드하기
     (f) getMain_Server : 오늘의 data 서버 연동
     (f) getVoteNumber_Server : 현재 투표자수 서버 연동
+    (f) getImage_Server : 오늘의 상품이미지 서버 연동
     (f) getMain_Reload : 오늘의 data 가 이미 있으면 저장된 값을 로드
     (f) ClockSet : 남은 시간 계산
-    (c) TimerThread : 남은 시간 스레드 + TimerHandler
+    (c) TimerThread : 남은 시간 계산 스레드 + TimerHandler
     */
 
 
@@ -55,6 +63,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     //widget
     TextView main_gifticonTv, main_voterCountTv, main_questionTv, main_beforePrizeTv, main_clockTv;
     Button main_exBtn[] = new Button[5];//main_ex1Btn, main_ex2Btn, main_ex3Btn, main_ex4Btn;
+    LinearLayout main_QuestionLayout;
 
     // Timer
     public TimerThread thread;
@@ -62,9 +71,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     // 변수
     String today_YYYYMMDD;
-    MySharedPreference pref;
     public Boolean RunFlag = true; // timer thread flag
     int exBtnArray[] = {R.id.main_ex1Btn, R.id.main_ex2Btn, R.id.main_ex3Btn, R.id.main_ex4Btn};
+
+
+    MySharedPreference pref;
 
     public MainFragment() {     }
 
@@ -94,25 +105,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         views = inflater.inflate(R.layout.fragment_main, container, false);
         mContext = getContext();
         mActivity = getActivity();
-        //Log.d("SUN", "MainFragment # "+ mParam1 + " , "+ mParam2);
-        InitWidget();
-
-        long nowdate = System.currentTimeMillis(); // 현재시간
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-        String now = df.format(nowdate);
-        today_YYYYMMDD = now; // 오늘날짜 계산 및 변환
-        ClockSet();
-
         pref = new MySharedPreference(mContext);
-        String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
 
-
-        if(now.equals(today)) // oneday data 이미
-            getMain_Reload();
-        else                  // oneday data 아직
-            getMain_Server();
-
-
+        InitWidget();
+        InitData(); // 데이터
+        ClockSet(); // 타이머 시간
         getVoteNumber_Server(); // 투표자수 갱신
 
         return views;
@@ -131,11 +128,25 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         main_exBtn[3] = (Button) views.findViewById(R.id.main_ex3Btn);
         main_exBtn[4] = (Button) views.findViewById(R.id.main_ex4Btn);
 
+        main_QuestionLayout  = (LinearLayout) views.findViewById(R.id.main_QuestionLayout);
+        main_QuestionLayout.setOnClickListener(this);
 
     }
 
+    void InitData(){
+        long nowdate = System.currentTimeMillis(); // 현재시간
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        String now = df.format(nowdate);
+        today_YYYYMMDD = now; // 오늘날짜 계산 및 변환
+        String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
+        if(now.equals(today)) // oneday data 이미
+            getMain_Reload();
+        else                  // oneday data 아직
+            getMain_Server();
+    }
+
     void getMain_Reload(){
-        MySharedPreference pref = new MySharedPreference(mContext);
+        //MySharedPreference pref = new MySharedPreference(mContext);
         main_gifticonTv.setText( pref.getPreferences("oneday","gift"));
         main_questionTv.setText(pref.getPreferences("oneday","question"));
         main_beforePrizeTv.setText( pref.getPreferences("oneday","winner"));
@@ -183,6 +194,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         pref.setPreferences("oneday","winner", winner);
                         pref.setPreferences("oneday","question", question);
 
+                        getImage_Server("avatar.png"); // 이미찌
 
                         JSONArray exArr = (JSONArray) obj.get("example");
                         for (int z = 1; z <= 4; z++) {
@@ -251,9 +263,54 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+
+    void getImage_Server(String imgName) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        Log.d("SUN", "getImage_Server()");
+        client.get("http://52.78.88.51:8080/OnePercentServer/resources/common/dist/img/"+imgName,  new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                // byteArrayToBitmap 를 통해 reponse로 받은 이미지 데이터 bitmap으로 변환
+                // Bitmap bitmap = byteArrayToBitmap(response);
+                // prize_giftImg.setImageBitmap(bitmap);
+
+                String saveImage = Base64.encodeToString(response, Base64.DEFAULT);
+                pref.setPreferences("oneday","giftImg", saveImage);
+              //  Log.d("SUN", "statusCode : " + statusCode + " , response : " +  new String(response));
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers.toString() + " , error : " + error.toString());
+            }
+
+            @Override
+            public void onRetry(int retryNo) {    }
+        });
+    }
+
+
+
+
     @Override
     public void onClick(View v) {
-
+        switch(v.getId()){
+            case R.id.main_QuestionLayout:
+                if(pref.getPreferences("user","userPhone").equals("")){
+                    Toast.makeText(mContext,"로그인 하셔야 이용 할 수 있습니다.",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    ((MainActivity)MainActivity.mContext).mViewPager.setCurrentItem(2);
+                }
+                break;
+        }
 
     }
 

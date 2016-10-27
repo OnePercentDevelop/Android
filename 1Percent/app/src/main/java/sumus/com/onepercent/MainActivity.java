@@ -1,5 +1,6 @@
 package sumus.com.onepercent;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,10 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       (f) AnimationStart : 클릭 애니메이션
       (f) FCMSetting : FCM 세팅 및 토큰
       */
+    public static Context mContext;
 
-
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    public SectionsPagerAdapter mSectionsPagerAdapter;
+    public ViewPager mViewPager;
     TabLayout tabLayout;
     View actionView;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        mContext= this;
         InitActionBar();
         InitWidget();
         FCMSetting();

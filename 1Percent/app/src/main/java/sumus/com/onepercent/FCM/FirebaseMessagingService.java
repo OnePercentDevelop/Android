@@ -11,7 +11,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,10 +59,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 
 
-        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle()
-                // .bigPicture(myBitmap)
-                .setBigContentTitle("1PERCENT")
-                .setSummaryText(message);
+//        NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle()
+//                // .bigPicture(myBitmap)
+//                .setBigContentTitle("1PERCENT")
+//                .setSummaryText(message);
 
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -68,7 +71,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentTitle("1PERCENT")
                 .setContentText(message)
                 .setAutoCancel(true)
-                .setStyle(new NotificationCompat.InboxStyle().setSummaryText(message))
+                .setStyle(new NotificationCompat.BigPictureStyle().setSummaryText(message))
                 .setSound(defaultSoundUri).setLights(000000255, 500, 2000)
                 .setContentIntent(pendingIntent);
 
@@ -84,5 +87,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     }
 
+    Bitmap DrawableToBitmap(){
+        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.mipmap.app_icon);
+        return drawable.getBitmap();
+
+    }
 
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/splash_background"
+    tools:context="sumus.com.onepercent.LoginActivity">
+
+    <LinearLayout
+        android:id="@+id/inputLayout"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/login_phoneEt"
+            android:singleLine="true"
+            android:hint="핸드폰번호"
+            android:background="@drawable/layout_radius"
+            android:layout_width="200dp"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/longin_pwdEt"
+            android:singleLine="true"
+            android:hint="비밀번호"
+            android:textSize="15sp"
+            android:background="@drawable/layout_radius"
+            android:layout_width="200dp"
+            android:padding="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content" />
+
+
+        <Button
+            android:id="@+id/login_loginBtn"
+            android:singleLine="true"
+            android:hint="로그인"
+            android:textSize="15sp"
+            android:background="@drawable/layout_radius"
+            android:layout_width="200dp"
+            android:padding="10dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_below="@id/inputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="10sp"
+            android:textColor="@color/colorWhite"
+            android:text="아직 회원이 아니신가요?           "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/login_joinTv"
+            android:textColor="@color/colorWhite"
+            android:text="회원가입"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>

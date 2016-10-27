@@ -1,6 +1,8 @@
 package sumus.com.onepercent.Fragment;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,6 +10,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.Base64;
+import com.loopj.android.http.RequestParams;
+
+import java.text.SimpleDateFormat;
+
+import cz.msebera.android.httpclient.Header;
+import sumus.com.onepercent.Object.MySharedPreference;
 import sumus.com.onepercent.R;
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -24,6 +36,9 @@ import static android.content.Context.SENSOR_SERVICE;
 public class PrizeFragment extends Fragment implements SensorEventListener {
     /*
     (f) InitWidget : 위젯 초기 설정
+    (f) byteArrayToBitmap :  byte 를 bitmap으로 변환
+    (f) StartAccelerSensor :  가속도 센서 측정 가능 상태
+    (f) StopAccelerSensor : 가속도 센서 측정 중지 상태
     */
 
 
@@ -55,11 +70,15 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
     View views;
 
     // widet
-    ImageView prize_animaitonImg;
+    ImageView prize_animaitonImg, prize_giftImg;
     TextView prize_shakeTv;
 
     // animation
     AnimationDrawable frameAnimation;
+
+
+
+    MySharedPreference pref;
 
   public PrizeFragment() {  }
 
@@ -87,22 +106,41 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
                              Bundle savedInstanceState) {
        // Log.d("SUN", "PrizeFragment # "+ mParam1 + " , "+ mParam2);
         mActivity = getActivity();
+        pref = new MySharedPreference(mActivity);
         views = inflater.inflate(R.layout.fragment_prize, container, false);
 
         sensorManager = (SensorManager) mActivity.getSystemService(SENSOR_SERVICE);
         accelerormeterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         InitWidget();
+
+        long nowdate = System.currentTimeMillis(); // 현재시간
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        String now = df.format(nowdate);
+        String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
+
+
+
         return views;
     }
 
     void  InitWidget(){
+        prize_giftImg =  (ImageView)views.findViewById(R.id.prize_giftImg);
+        prize_giftImg.setImageBitmap(byteArrayToBitmap(Base64.decode(pref.getPreferences("oneday","giftImg"), Base64.DEFAULT)));
+
         prize_animaitonImg =  (ImageView)views.findViewById(R.id.prize_animaitonImg);
         prize_animaitonImg.setBackgroundResource(R.drawable.animaiton_list);
         frameAnimation = (AnimationDrawable) prize_animaitonImg.getBackground();  // 이미지를 동작시키기위해  AnimationDrawable 객체를 가져온다.
-        prize_shakeTv = (TextView) views.findViewById(R.id.prize_shakeTv);
+       // prize_shakeTv = (TextView) views.findViewById(R.id.prize_shakeTv);
     }
 
+    public Bitmap byteArrayToBitmap(byte[] byteArray ) {  // byte -> bitmap 변환 및 반환
+        Bitmap bitmap = BitmapFactory.decodeByteArray( byteArray, 0, byteArray.length ) ;
+        return bitmap ;
+    }
+
+
+    // 가속도 센서
     int ShakeCount = 0;
 
     @Override
@@ -120,12 +158,13 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
 
                 if (speed > SHAKE_THRESHOLD) {  // 이벤트발생!!
                     ShakeCount++;
-                    prize_shakeTv.setText(ShakeCount+"번");
+                   // prize_shakeTv.setText(ShakeCount+"번");
                     frameAnimation.start();
 
-                    if(ShakeCount>50){ // 할당량 채우면 애니메이션 중지
+                    if(ShakeCount>30){ // 할당량 채우면 애니메이션 및 센서 중지
                         Toast.makeText(mActivity, "shake it !!!", Toast.LENGTH_SHORT).show();
                         frameAnimation.stop();
+                        StopAccelerSensor();
                     }
                 }else{
                     frameAnimation.stop();
@@ -135,28 +174,33 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
                 lastY = event.values[DATA_Y];
                 lastZ = event.values[DATA_Z];
             }
-
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
+
+    void StartAccelerSensor(){
+        if (accelerormeterSensor != null)
+            sensorManager.registerListener(this, accelerormeterSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
+    void StopAccelerSensor(){
+        if (sensorManager != null)
+            sensorManager.unregisterListener(this);
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (accelerormeterSensor != null)
-            sensorManager.registerListener(this, accelerormeterSensor, SensorManager.SENSOR_DELAY_GAME);
+        StartAccelerSensor();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (sensorManager != null)
-            sensorManager.unregisterListener(this);
+        StopAccelerSensor();
     }
 
 }

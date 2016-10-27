@@ -5,19 +5,21 @@
     android:orientation="vertical"
     tools:context=".Fragment.PrizeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/prize_shakeTv"
-        android:text="0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <ImageView
+        android:visibility="gone"
         android:layout_gravity="center"
         android:id="@+id/prize_animaitonImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true" />
+
+    <ImageView
+        android:id="@+id/prize_giftImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
 
 </LinearLayout>
