@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import sumus.com.onepercent.Fragment.MainFragment;
 import sumus.com.onepercent.Fragment.MoreFragment;
 import sumus.com.onepercent.Fragment.PrizeFragment;
-import sumus.com.onepercent.Fragment.QuestionFragment;
+import sumus.com.onepercent.Fragment.VoteFragment;
 
 /**
  * Created by MINI on 2016-10-27.
@@ -29,7 +29,7 @@ import sumus.com.onepercent.Fragment.QuestionFragment;
                 fragment =  MainFragment.newInstance("hello", "world");
                 break;
             case 1:
-                fragment = QuestionFragment.newInstance("hello", "world");
+                fragment = VoteFragment.newInstance("hello", "world");
                 break;
             case 2:
                 fragment = PrizeFragment.newInstance("hello", "world");
@@ -49,14 +49,14 @@ import sumus.com.onepercent.Fragment.QuestionFragment;
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0:
-                return "홈";
-            case 1:
-                return "질문";
-            case 2:
-                return "당첨자";
-            case 3:
-                return "더보기";
+//            case 0:
+//                return "홈";
+//            case 1:
+//                return "질문";
+//            case 2:
+//                return "당첨자";
+//            case 3:
+//                return "더보기";
         }
         return null;
     }

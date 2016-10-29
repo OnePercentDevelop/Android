@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String phone = login_phoneEt.getText().toString();
-                String pwd = login_phoneEt.getText().toString();
-                if(isPhoneNumber(phone) && isPassword(phone)){ // + 서버 연동
+                String pwd = longin_pwdEt.getText().toString();
+                if(isPhoneNumber(phone) && isPassword(pwd)){ // + 서버 연동
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     pref.setPreferences("user","userPwd", pwd);
                     pref.setPreferences("user","userPhone",phone );
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     boolean isPassword(String str){
-        if(str.length()<= 4 && str.length()<=10)
+        if( 4 <= str.length() && str.length()<=10)
             return true;
         else
             return false;

@@ -40,8 +40,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".JoinActivity"></activity>
+        <activity android:name=".LoginActivity" android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".JoinActivity"   android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

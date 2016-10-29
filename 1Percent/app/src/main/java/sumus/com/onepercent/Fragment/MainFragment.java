@@ -61,7 +61,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public Activity mActivity;
 
     //widget
-    TextView main_gifticonTv, main_voterCountTv, main_questionTv, main_beforePrizeTv, main_clockTv;
+    TextView main_gifticonTv, main_voterCountTv, main_questionTv, main_beforePrizeTv, main_clockTv, main_timerTv;
     Button main_exBtn[] = new Button[5];//main_ex1Btn, main_ex2Btn, main_ex3Btn, main_ex4Btn;
     LinearLayout main_QuestionLayout;
 
@@ -71,9 +71,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     // 변수
     String today_YYYYMMDD;
+    String vote_before_str , vote_str , prize_before_str , price_str ;
     public Boolean RunFlag = true; // timer thread flag
     int exBtnArray[] = {R.id.main_ex1Btn, R.id.main_ex2Btn, R.id.main_ex3Btn, R.id.main_ex4Btn};
-
+    String nowStr;
 
     MySharedPreference pref;
 
@@ -123,6 +124,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         main_questionTv = (TextView) views.findViewById(R.id.main_questionTv);
         main_beforePrizeTv = (TextView) views.findViewById(R.id.main_beforePrizeTv);
 
+        main_timerTv = (TextView) views.findViewById(R.id.main_timerTv);
+
         main_exBtn[1] = (Button) views.findViewById(R.id.main_ex1Btn);
         main_exBtn[2] = (Button) views.findViewById(R.id.main_ex2Btn);
         main_exBtn[3] = (Button) views.findViewById(R.id.main_ex3Btn);
@@ -133,27 +136,28 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    void InitData(){
+    void TodayDate(){
         long nowdate = System.currentTimeMillis(); // 현재시간
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-        String now = df.format(nowdate);
-        today_YYYYMMDD = now; // 오늘날짜 계산 및 변환
+        nowStr = df.format(nowdate);
+        today_YYYYMMDD = nowStr; // 오늘날짜 계산 및 변환
+    }
+
+    void InitData(){
+        TodayDate();
         String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
-        if(now.equals(today)) // oneday data 이미
+        if(nowStr.equals(today)) // oneday data 이미
             getMain_Reload();
         else                  // oneday data 아직
             getMain_Server();
     }
 
     void getMain_Reload(){
-        //MySharedPreference pref = new MySharedPreference(mContext);
-        main_gifticonTv.setText( pref.getPreferences("oneday","gift"));
+       main_gifticonTv.setText( pref.getPreferences("oneday","gift"));
         main_questionTv.setText(pref.getPreferences("oneday","question"));
         main_beforePrizeTv.setText( pref.getPreferences("oneday","winner"));
-
         for (int z = 1; z <= 4; z++) {
-          //  Log.d("SUN","MainFragment # " +pref.getPreferences("oneday","ex"+z));
-            String ex = pref.getPreferences("oneday","ex"+z);
+           String ex = pref.getPreferences("oneday","ex"+z);
             main_exBtn[z].setText(ex);
         }
     }
@@ -321,6 +325,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             while(RunFlag){
                 try {
                    // Log.d("SUN","MainFragment # run TimerThread : " +ints++);
+
                     TimerHandler.sendEmptyMessage(0);
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -334,6 +339,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             //Log.d("SUN","Message : " +msg.what);
+            TodayDate();
             ClockSet();
         }
     };
@@ -344,18 +350,36 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         long base_time, now_time, gap_time;
 
         try {
-            base_date = df.parse(today_YYYYMMDD+" 22:00:00"); // 기준시간
-            base_time =  base_date.getTime(); // date형 기준 시간을 long 변환
-
             now_time = System.currentTimeMillis(); // 현재시간
 
+            if(
+                now_time  < (df.parse(today_YYYYMMDD+" 11:00:00")).getTime()  ){
+                base_time = (df.parse(today_YYYYMMDD+" 11:00:00")).getTime();
+                main_timerTv.setText("투표 시작 시간");
+            }
+            else if(
+                now_time  < (df.parse(today_YYYYMMDD+" 13:00:00")).getTime()  ){
+                base_time = (df.parse(today_YYYYMMDD+" 13:00:00")).getTime();
+                main_timerTv.setText("투표 종료 시간");
+            }
+            else if(
+                now_time  < (df.parse(today_YYYYMMDD+" 18:45:00")).getTime()  ){
+                base_time = (df.parse(today_YYYYMMDD+" 18:45:00")).getTime();
+                main_timerTv.setText("당첨자 발표 시간");
+            }
+            else{
+                base_time = (df.parse(today_YYYYMMDD+" 24:00:00")).getTime();
+                main_timerTv.setText("당첨자 발표 종료 시간");
+            }
+
+            now_time = System.currentTimeMillis(); // 현재시간
             gap_time = (base_time -now_time) / 1000; // 기준 시간 - 현재 시간 (초)
 
             long hourGap = gap_time / 60 / 60 ; // 시간
             long minGap = ((long)(gap_time / 60)) % 60; // 분
             long secGap = gap_time % 60; // 초
 
-            String resultTime = String.format("%02d", hourGap) + ":" +  String.format("%02d", minGap) + ":" +  String.format("%02d", secGap);
+            String resultTime = String.format("%02d", hourGap) + " : " +  String.format("%02d", minGap) + " : " +  String.format("%02d", secGap);
             main_clockTv.setText(resultTime);
 
         } catch (ParseException e) {

@@ -7,14 +7,43 @@
         <item name="android:textStyle">normal|bold</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="main_bit_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_gravity">center</item>
         <item name="android:textSize">30sp</item>
     </style>
 
-
-    <style name="main_small">
+    <style name="main_title">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="main_small_gray">
         <item name="android:textColor">@color/colorDarkGray</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="main_small_red">
+        <item name="android:textColor">@color/colocRed</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">normal|bold</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:layout_gravity">center</item>

@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     View actionView;
 
     TextView action_titleTv;
+    ImageButton action_settingBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         tabLayout.setTabTextColors(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite)); // 비선택, 선택
 
+        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.mipmap.home_btn));
+        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.mipmap.vote_btn));
+        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.mipmap.prize_btn));
+        tabLayout.getTabAt(3).setIcon(getResources().getDrawable(R.mipmap.more_btn));
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
         {
             @Override
@@ -71,15 +78,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     case 0: // 홈
                         action_titleTv.setText("홈");
+                        action_settingBtn.setBackground(getResources().getDrawable(R.mipmap.timeinformation_btn));
                         break;
                     case 1: // 질문
                         action_titleTv.setText("질문");
+                        action_settingBtn.setBackground(getResources().getDrawable(R.mipmap.calender_btn));
                         break;
                     case 2: // 당첨자
                         action_titleTv.setText("당첨자");
+                        action_settingBtn.setBackground(getResources().getDrawable(R.mipmap.calender_btn));
                         break;
                     case 3: // 더보기
                         action_titleTv.setText("더보기");
+                        action_settingBtn.setBackground(getResources().getDrawable(R.mipmap.setting_btn));
                         break;
 
                 }
@@ -104,8 +115,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayShowCustomEnabled(true);
 
         actionView = getSupportActionBar().getCustomView();
-        actionView.findViewById(R.id.action_moreBtn).setOnClickListener(this);
+        actionView.findViewById(R.id.action_settingBtn).setOnClickListener(this);
         action_titleTv = (TextView) actionView.findViewById(R.id.action_titleTv);
+        action_settingBtn = (ImageButton) actionView.findViewById(R.id.action_settingBtn);
+        action_settingBtn.setOnClickListener(this);
     }
 
     @Override
@@ -115,8 +128,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AnimationStart(v.getId(), anim);
 
         switch (v.getId()){
-            case R.id.action_moreBtn :
-                Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_SHORT).show();
+            case R.id.action_settingBtn :
+                switch(mViewPager.getCurrentItem()){
+                    case 0:
+                        Toast.makeText(getApplicationContext(),"home",Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 1:
+                        Toast.makeText(getApplicationContext(),"question",Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 2:
+                        Toast.makeText(getApplicationContext(),"prize",Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 3:
+                        Toast.makeText(getApplicationContext(),"more",Toast.LENGTH_SHORT).show();
+                        break;
+                }
                 break;
         }
     }
