@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,7 +22,7 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
 
     EditText join_phoneEt,join_pwd1Et,join_pwd2Et;
     TextView join_pwokTv;
-    Button join_cancleBtn, join_okBtn;
+    Button  join_okBtn;
 
     Boolean phone_flag= true;
     Boolean pwd_flag= false;
@@ -31,11 +33,13 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mContext = this;
         InitWidget();
     }
 
     void InitWidget(){
+        pref = new MySharedPreference(mContext);
         join_phoneEt = (EditText)findViewById(R.id.join_phoneEt);
         join_pwd1Et = (EditText)findViewById(R.id.join_pwd1Et);
         join_pwd2Et = (EditText)findViewById(R.id.join_pwd2Et);
@@ -44,8 +48,8 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
         join_pwd1Et.addTextChangedListener(this);
         join_pwd2Et.addTextChangedListener(this);
 
-        join_cancleBtn = (Button) findViewById(R.id.join_cancleBtn);
         join_okBtn = (Button) findViewById(R.id.join_okBtn);
+        join_okBtn.setOnClickListener(this);
     }
 
     @Override
@@ -76,8 +80,11 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
             case R.id.join_okBtn:
                 if(pwd_flag && phone_flag)
                 {
-                    pref.setPreferences("user","userPwd", join_phoneEt.getText().toString());
-                    pref.setPreferences("user","userPhone",join_pwd2Et.getText().toString() );
+                    Toast.makeText(mContext,"회원가입 및 로그인이 되었습니다.",Toast.LENGTH_SHORT).show();
+
+
+                    pref.setPreferences("user","userPwd", join_pwd2Et.getText().toString()+"");
+                    pref.setPreferences("user","userPhone",join_phoneEt.getText().toString()+"" );
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -92,9 +99,6 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
 
                 break;
 
-            case R.id.join_cancleBtn:
-
-                break;
         }
     }
 }

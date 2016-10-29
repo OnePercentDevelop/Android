@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@mipmap/splash_background"
+    android:background="@mipmap/login_background"
     tools:context="sumus.com.onepercent.LoginActivity">
 
     <LinearLayout
+        android:layout_marginTop="350dp"
+        android:gravity="center"
         android:id="@+id/inputLayout"
-        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:layout_marginBottom="5dp"
@@ -21,40 +22,41 @@
             android:id="@+id/login_phoneEt"
             android:singleLine="true"
             android:hint="핸드폰번호"
-            android:background="@drawable/layout_radius"
-            android:layout_width="200dp"
-            android:padding="10dp"
+            android:inputType="number|phone"
+            android:digits="1234567890"
+            android:background="@mipmap/id_box"
+            android:layout_width="270dp"
             android:textSize="15sp"
+            android:paddingLeft="50dp"
             android:layout_marginBottom="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp" />
 
         <EditText
             android:id="@+id/longin_pwdEt"
             android:singleLine="true"
             android:hint="비밀번호"
+            android:paddingLeft="50dp"
             android:textSize="15sp"
             android:inputType="textPassword"
-            android:background="@drawable/layout_radius"
-            android:layout_width="200dp"
-            android:padding="10dp"
+            android:background="@mipmap/pw_box"
+            android:layout_width="270dp"
             android:layout_marginBottom="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp" />
 
 
         <Button
             android:id="@+id/login_loginBtn"
             android:singleLine="true"
-            android:hint="로그인"
             android:textSize="15sp"
-            android:background="@drawable/layout_radius"
-            android:layout_width="200dp"
+            android:background="@mipmap/login_btn"
+            android:layout_width="270dp"
             android:padding="10dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_below="@id/inputLayout"
         android:layout_width="wrap_content"
@@ -63,7 +65,7 @@
         <TextView
             android:textSize="10sp"
             android:textColor="@color/colorWhite"
-            android:text="아직 회원이 아니신가요?           "
+            android:text="계정이 없으신가요?"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -74,4 +76,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-</RelativeLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_below="@id/inputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="10sp"
+            android:textColor="@color/colorWhite"
+            android:text="비밀번호를 잊으셨나요?"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/login_findTv"
+            android:textColor="@color/colorWhite"
+            android:text="PW찾기"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    style="@style/actionbar"
+    android:paddingRight="10dp">
+
+
+
+    <ImageButton
+        android:id="@+id/action_settingBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@mipmap/action_back_btn"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/action_titleTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="홈"
+        android:textColor="@color/colorWhite" />
+</LinearLayout>

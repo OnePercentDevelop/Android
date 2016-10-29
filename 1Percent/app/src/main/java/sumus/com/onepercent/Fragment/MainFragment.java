@@ -307,11 +307,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             case R.id.main_QuestionLayout:
                 if(pref.getPreferences("user","userPhone").equals("")){
                     Toast.makeText(mContext,"로그인 하셔야 이용 할 수 있습니다.",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(intent);
+
+                    ((MainActivity)MainActivity.mContext).mViewPager.setCurrentItem(1);
+//                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                    startActivity(intent);
                 }
                 else{
-                    ((MainActivity)MainActivity.mContext).mViewPager.setCurrentItem(2);
+                    ((MainActivity)MainActivity.mContext).mViewPager.setCurrentItem(1);
                 }
                 break;
         }
@@ -347,29 +349,29 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void ClockSet(){
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         Date base_date = null;
-        long base_time, now_time, gap_time;
+        long base_time=0, now_time, gap_time;
 
         try {
             now_time = System.currentTimeMillis(); // 현재시간
 
-            if(
-                now_time  < (df.parse(today_YYYYMMDD+" 11:00:00")).getTime()  ){
+            if( now_time  < (df.parse(today_YYYYMMDD+" 11:00:00")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 11:00:00")).getTime();
                 main_timerTv.setText("투표 시작 시간");
             }
-            else if(
-                now_time  < (df.parse(today_YYYYMMDD+" 13:00:00")).getTime()  ){
+            else if(  now_time  < (df.parse(today_YYYYMMDD+" 13:00:00")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 13:00:00")).getTime();
                 main_timerTv.setText("투표 종료 시간");
             }
-            else if(
-                now_time  < (df.parse(today_YYYYMMDD+" 18:45:00")).getTime()  ){
+            else if( now_time  < (df.parse(today_YYYYMMDD+" 18:45:00")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 18:45:00")).getTime();
                 main_timerTv.setText("당첨자 발표 시간");
             }
-            else{
-                base_time = (df.parse(today_YYYYMMDD+" 24:00:00")).getTime();
+            else if(   now_time  < (df.parse(today_YYYYMMDD+" 23:59:59")).getTime()  ){
+                base_time = (df.parse(today_YYYYMMDD+" 23:59:59")).getTime();
                 main_timerTv.setText("당첨자 발표 종료 시간");
+            }
+            else if(   now_time  == (df.parse(today_YYYYMMDD+" 23:59:59")).getTime()  ){
+                pref.removeAllPreferences("oneday"); // 데이터 초기화
             }
 
             now_time = System.currentTimeMillis(); // 현재시간

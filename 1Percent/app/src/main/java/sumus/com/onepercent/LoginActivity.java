@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mContext = this;
         InitWidget();
         pref = new MySharedPreference(mContext);
@@ -52,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                     pref.setPreferences("user","userPwd", pwd);
                     pref.setPreferences("user","userPhone",phone );
                     startActivity(intent);
+                    finish();
                 }
                 else{
                     Toast.makeText(mContext,"다시한번 확인해주세요",Toast.LENGTH_SHORT).show();

@@ -1,6 +1,7 @@
 package sumus.com.onepercent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -136,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     case 1:
                         Toast.makeText(getApplicationContext(),"question",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, CalenderActivity.class);
+                        startActivity(intent);
                         break;
 
                     case 2:

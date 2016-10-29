@@ -11,9 +11,10 @@ import android.util.Log;
 
 public class MySharedPreference {
      /*
-        oneday : 하루에 한번만 동기화 필요한 데이터            gift,  question, winner, ex1~4, giftImg
+        oneday : 하루에 한번만 동기화 필요한 데이터            gift,  question, winner, ex1~4, giftImg, vote
         fcm : fcm push 위한 데이터                          device, push
         user : 회원 로그인 관련 데이터                       userPhone, userPwd
+
      */
 
     static Context mContext;

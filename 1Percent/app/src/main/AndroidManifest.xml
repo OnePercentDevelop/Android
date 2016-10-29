@@ -28,6 +28,15 @@
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".JoinActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CalenderActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <!-- FCM -->
         <service android:name=".FCM.FirebaseMessagingService">
             <intent-filter>
@@ -40,9 +49,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".LoginActivity" android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name=".JoinActivity"   android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
