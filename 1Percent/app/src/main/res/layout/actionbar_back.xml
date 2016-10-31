@@ -7,17 +7,24 @@
 
 
 
-    <ImageButton
+    <Button
+        android:text="◀"
+        android:textColor="@color/colorWhite"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
         android:id="@+id/action_settingBtn"
         android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_height="match_parent"
         android:layout_marginRight="10dp"
-        android:background="@mipmap/action_back_btn"
+        android:background="@color/colorTran"
         android:scaleType="fitCenter" />
 
     <TextView
+        android:layout_gravity="center_vertical"
         android:id="@+id/action_titleTv"
-        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:text="홈"

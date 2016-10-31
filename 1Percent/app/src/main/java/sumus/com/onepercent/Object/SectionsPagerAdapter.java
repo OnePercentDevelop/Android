@@ -46,6 +46,12 @@ import sumus.com.onepercent.Fragment.VoteFragment;
         return 4;
     }
 
+    
+
+
+
+
+
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {

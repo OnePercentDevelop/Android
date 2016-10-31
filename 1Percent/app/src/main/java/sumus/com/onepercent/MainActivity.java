@@ -20,6 +20,9 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.text.SimpleDateFormat;
+
+import sumus.com.onepercent.Fragment.VoteFragment;
 import sumus.com.onepercent.Object.SectionsPagerAdapter;
 
 
@@ -30,15 +33,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       (f) AnimationStart : 클릭 애니메이션
       (f) FCMSetting : FCM 세팅 및 토큰
       */
+    final static int REQUEST_CALENDER = 1000;
     public static Context mContext;
 
+    // fragment
     public SectionsPagerAdapter mSectionsPagerAdapter;
     public ViewPager mViewPager;
     TabLayout tabLayout;
     View actionView;
 
+    // widget
     TextView action_titleTv;
     ImageButton action_settingBtn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mContext= this;
         InitActionBar();
         InitWidget();
-        FCMSetting();
+       // FCMSetting();
 
     }
 
@@ -138,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case 1:
                         Toast.makeText(getApplicationContext(),"question",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(mContext, CalenderActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent,REQUEST_CALENDER);
                         break;
 
                     case 2:
@@ -165,5 +173,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String deviceToken = FirebaseInstanceId.getInstance().getToken(); // Token - 디바이스 정보
         FirebaseMessaging.getInstance().subscribeToTopic("notice"); //  (notice)토픽명 그룹 전체 메세지 전송
         Log.d("SUN","MainAcitivty # FCMSetting");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_CALENDER:
+                String select_date;
+                if (resultCode == RESULT_OK) {
+                    select_date = data.getStringExtra("select_date");
+                    Toast.makeText(mContext, "select_date : " + select_date, Toast.LENGTH_SHORT).show();
+                    VoteFragment.newInstance("calender","select_date");
+
+
+
+                } else {
+                    long now = System.currentTimeMillis();
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                    select_date = df.format(now);
+                   Toast.makeText(mContext, "select_date : " + select_date, Toast.LENGTH_SHORT).show();
+
+                }
+
+        }
     }
 }

@@ -3,6 +3,8 @@ package sumus.com.onepercent.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +67,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     TextView main_gifticonTv, main_voterCountTv, main_questionTv, main_beforePrizeTv, main_clockTv, main_timerTv;
     Button main_exBtn[] = new Button[5];//main_ex1Btn, main_ex2Btn, main_ex3Btn, main_ex4Btn;
     LinearLayout main_QuestionLayout;
+    ImageView main_giftImg;
 
     // Timer
     public TimerThread thread;
@@ -98,6 +102,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+//        Bundle extra = getArguments();
+//        String select_date = extra.getString("select_date");
     }
 
     @Override
@@ -109,6 +116,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         pref = new MySharedPreference(mContext);
 
         InitWidget();
+        TodayDate();
         InitData(); // 데이터
         ClockSet(); // 타이머 시간
         getVoteNumber_Server(); // 투표자수 갱신
@@ -123,6 +131,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         main_voterCountTv = (TextView) views.findViewById(R.id.main_voterCountTv);
         main_questionTv = (TextView) views.findViewById(R.id.main_questionTv);
         main_beforePrizeTv = (TextView) views.findViewById(R.id.main_beforePrizeTv);
+
+        main_giftImg = (ImageView) views.findViewById(R.id.main_giftImg);
 
         main_timerTv = (TextView) views.findViewById(R.id.main_timerTv);
 
@@ -144,7 +154,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     void InitData(){
-        TodayDate();
+
         String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
         if(nowStr.equals(today)) // oneday data 이미
             getMain_Reload();
@@ -160,18 +170,19 @@ public class MainFragment extends Fragment implements View.OnClickListener {
            String ex = pref.getPreferences("oneday","ex"+z);
             main_exBtn[z].setText(ex);
         }
+        main_giftImg.setImageBitmap(byteArrayToBitmap(Base64.decode(pref.getPreferences("oneday","giftImg"), Base64.DEFAULT)));
     }
 
     void getMain_Server() {
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "MainFragment # getMain_Server()");
-        client.get("http://52.78.88.51:8080/OnePercentServer/main.do", new AsyncHttpResponseHandler() {
+        client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/main.do", new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {    }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                //Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+                Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
                 String res = new String(response);
                 try {
                     JSONObject object = new JSONObject(res);
@@ -183,10 +194,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
                         JSONObject obj = (JSONObject) arr.get(i);
 
-                        String gift = (String) obj.get("gift");
+                        String gift = (String) obj.get("gift_name");
                         String winner = (String) obj.get("winner");
                         String question = (String) obj.get("question");
                         String today = (String) obj.get("today");
+                        String giftImg = (String)obj.get("gift_png");
 
                         main_gifticonTv.setText(gift);
                         main_questionTv.setText(question);
@@ -197,8 +209,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         pref.setPreferences("oneday","gift", gift);
                         pref.setPreferences("oneday","winner", winner);
                         pref.setPreferences("oneday","question", question);
+                        pref.setPreferences("oneday","giftImg", giftImg);
 
-                        getImage_Server("avatar.png"); // 이미찌
+                        getImage_Server(giftImg); // 이미찌
 
                         JSONArray exArr = (JSONArray) obj.get("example");
                         for (int z = 1; z <= 4; z++) {
@@ -230,14 +243,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         //((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "MainFragment # getVoteNumber_Server()");
-        client.get("http://52.78.88.51:8080/OnePercentServer/votenumber.do", new AsyncHttpResponseHandler() {
+        client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/votenumber.do", new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {   }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-               // Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+                Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
 
                 String res = new String(response);
                 try {
@@ -268,19 +281,24 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    public Bitmap byteArrayToBitmap(byte[] byteArray ) {  // byte -> bitmap 변환 및 반환
+        Bitmap bitmap = BitmapFactory.decodeByteArray( byteArray, 0, byteArray.length ) ;
+        return bitmap ;
+    }
+
     void getImage_Server(String imgName) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "getImage_Server()");
-        client.get("http://52.78.88.51:8080/OnePercentServer/resources/common/dist/img/"+imgName,  new AsyncHttpResponseHandler() {
+        client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/resources/common/image/"+imgName,  new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 // byteArrayToBitmap 를 통해 reponse로 받은 이미지 데이터 bitmap으로 변환
-                // Bitmap bitmap = byteArrayToBitmap(response);
-                // prize_giftImg.setImageBitmap(bitmap);
+                 Bitmap bitmap = byteArrayToBitmap(response);
+                main_giftImg.setImageBitmap(bitmap);
 
                 String saveImage = Base64.encodeToString(response, Base64.DEFAULT);
                 pref.setPreferences("oneday","giftImg", saveImage);
