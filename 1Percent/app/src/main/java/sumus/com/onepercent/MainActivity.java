@@ -3,6 +3,9 @@ package sumus.com.onepercent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
@@ -22,6 +25,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 
+import sumus.com.onepercent.Fragment.MainFragment;
 import sumus.com.onepercent.Fragment.VoteFragment;
 import sumus.com.onepercent.Object.SectionsPagerAdapter;
 
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // fragment
     public SectionsPagerAdapter mSectionsPagerAdapter;
+    public PagerAdapter mPagerAdapter;
     public ViewPager mViewPager;
     TabLayout tabLayout;
     View actionView;
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView action_titleTv;
     ImageButton action_settingBtn;
 
+    // 변수
+    public Boolean vote_possible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     void InitWidget() {
         // tab layout
+
+        mPagerAdapter = new sumus.com.onepercent.Object.PagerAdapter(this);
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -132,9 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Animation anim = null;
-        anim = new AlphaAnimation(0, 1);
-        AnimationStart(v.getId(), anim);
+//        Animation anim = null;
+//        anim = new AlphaAnimation(0, 1);
+        AnimationStart(v.getId());
 
         switch (v.getId()){
             case R.id.action_settingBtn :
@@ -162,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    void AnimationStart(int id, Animation ani){
-        Animation anim = ani;
+    void AnimationStart(int id){
+        Animation anim =  new AlphaAnimation(0, 1);
         anim.setDuration(100);
         anim.setInterpolator(new LinearInterpolator());
         findViewById(id).startAnimation(anim);
@@ -172,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void FCMSetting(){
         String deviceToken = FirebaseInstanceId.getInstance().getToken(); // Token - 디바이스 정보
         FirebaseMessaging.getInstance().subscribeToTopic("notice"); //  (notice)토픽명 그룹 전체 메세지 전송
-        Log.d("SUN","MainAcitivty # FCMSetting");
+        //Log.d("SUN","MainAcitivty # FCMSetting : " + deviceToken);
     }
 
     @Override
@@ -186,7 +196,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     select_date = data.getStringExtra("select_date");
                     Toast.makeText(mContext, "select_date : " + select_date, Toast.LENGTH_SHORT).show();
                     VoteFragment.newInstance("calender","select_date");
-
+                    //mSectionsPagerAdapter.getFragment(1).getFragmentManager().findFragmentById(R.id.)
+                   // mSectionsPagerAdapter.getItem(1).getFragmentManager().beginTransaction().replace(R.id.main_contents, VoteFragment.newInstance(select_date,"world")).commit();
 
 
                 } else {

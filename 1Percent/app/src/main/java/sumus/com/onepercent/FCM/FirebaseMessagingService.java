@@ -25,6 +25,7 @@ import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Map;
 
 import sumus.com.onepercent.MainActivity;
@@ -41,9 +42,17 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Map<String, String> data = remoteMessage.getData();
         String title = data.get("title");
         String msg = data.get("message");
-        Log.d("SUN","title : " + title + " / msg : "+ msg);
-        sendPushNotification(remoteMessage.getData().get("message"));
+        String message = null;
+        try {
+            message = URLDecoder.decode(msg, "euc-kr");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        Log.d("SUN","title : " + title + " / msg : "+ message);
+        sendPushNotification(message); // remoteMessage.getData().get("message")
         String from = remoteMessage.getFrom();
+
 
 //        Intent intent_ = new Intent(((SplashActivity)SplashActivity.mContext), PopupActivity.class);
 //        intent_.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);   // 이거 안해주면 안됨

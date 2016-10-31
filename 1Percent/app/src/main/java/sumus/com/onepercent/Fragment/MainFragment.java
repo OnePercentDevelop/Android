@@ -79,6 +79,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public Boolean RunFlag = true; // timer thread flag
     int exBtnArray[] = {R.id.main_ex1Btn, R.id.main_ex2Btn, R.id.main_ex3Btn, R.id.main_ex4Btn};
     String nowStr;
+    //public Boolean vote_possible = false;
 
     MySharedPreference pref;
 
@@ -168,7 +169,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         main_beforePrizeTv.setText( pref.getPreferences("oneday","winner"));
         for (int z = 1; z <= 4; z++) {
            String ex = pref.getPreferences("oneday","ex"+z);
-            main_exBtn[z].setText(ex);
+            main_exBtn[z].setText(z+". "+ex);
         }
         main_giftImg.setImageBitmap(byteArrayToBitmap(Base64.decode(pref.getPreferences("oneday","giftImg"), Base64.DEFAULT)));
     }
@@ -218,7 +219,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                             JSONObject exObj = (JSONObject) exArr.get(0);
                             String ex = (String) exObj.get(z + "");
                             pref.setPreferences("oneday","ex"+z, ex);
-                            main_exBtn[z].setText(ex+"");
+                            main_exBtn[z].setText(z+". "+ex+"");
                         }
                     }
 
@@ -375,21 +376,26 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             if( now_time  < (df.parse(today_YYYYMMDD+" 11:00:00")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 11:00:00")).getTime();
                 main_timerTv.setText("투표 시작 시간");
+                ((MainActivity)MainActivity.mContext).vote_possible = false;
             }
             else if(  now_time  < (df.parse(today_YYYYMMDD+" 13:00:00")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 13:00:00")).getTime();
                 main_timerTv.setText("투표 종료 시간");
+                ((MainActivity)MainActivity.mContext).vote_possible = true;
             }
             else if( now_time  < (df.parse(today_YYYYMMDD+" 18:45:00")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 18:45:00")).getTime();
                 main_timerTv.setText("당첨자 발표 시간");
+                ((MainActivity)MainActivity.mContext). vote_possible = false;
             }
             else if(   now_time  < (df.parse(today_YYYYMMDD+" 23:59:59")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 23:59:59")).getTime();
                 main_timerTv.setText("당첨자 발표 종료 시간");
+                ((MainActivity)MainActivity.mContext).vote_possible = false;
             }
             else if(   now_time  == (df.parse(today_YYYYMMDD+" 23:59:59")).getTime()  ){
                 pref.removeAllPreferences("oneday"); // 데이터 초기화
+                ((MainActivity)MainActivity.mContext). vote_possible = false;
             }
 
             now_time = System.currentTimeMillis(); // 현재시간

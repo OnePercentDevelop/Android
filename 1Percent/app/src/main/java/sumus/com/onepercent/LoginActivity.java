@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -11,6 +12,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 import sumus.com.onepercent.Object.MySharedPreference;
 
 public class LoginActivity extends AppCompatActivity {
@@ -50,11 +60,12 @@ public class LoginActivity extends AppCompatActivity {
                 String phone = login_phoneEt.getText().toString();
                 String pwd = longin_pwdEt.getText().toString();
                 if(isPhoneNumber(phone) && isPassword(pwd)){ // + 서버 연동
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    pref.setPreferences("user","userPwd", pwd);
-                    pref.setPreferences("user","userPhone",phone );
-                    startActivity(intent);
-                    finish();
+                    getLogin_Server(phone,pwd);
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                    pref.setPreferences("user","userPwd", pwd);
+//                    pref.setPreferences("user","userPhone",phone );
+//                    startActivity(intent);
+//                    finish();
                 }
                 else{
                     Toast.makeText(mContext,"다시한번 확인해주세요",Toast.LENGTH_SHORT).show();
@@ -82,4 +93,63 @@ public class LoginActivity extends AppCompatActivity {
         else
             return false;
     }
+
+    void getLogin_Server(final String id, final String pwd) {
+        //((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
+        final RequestParams params = new RequestParams();
+        params.put("user_id",id);
+        params.put("user_password",pwd);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        Log.d("SUN", "JoinActivity # getJoin_Server()");
+        client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/login.do",params,new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+
+                String res = new String(response);
+                try {
+                    JSONObject object = new JSONObject(res);
+                    String objStr = object.get("login_result") + "";
+
+                    JSONArray arr = new JSONArray(objStr);
+
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj = (JSONObject) arr.get(i);
+                        String state = (String) obj.get("state");
+
+                        if (state.equals("success")) {
+                            Toast.makeText(mContext, "로그인 완료", Toast.LENGTH_SHORT).show();
+                            pref.setPreferences("user", "userPwd",id + "");
+                            pref.setPreferences("user", "userPhone", pwd + "");
+
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(mContext, "로그인 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("SUN", "e : " + e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers.toString() + " , error : " + error.toString());
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
 }
