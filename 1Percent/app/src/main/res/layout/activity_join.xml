@@ -9,11 +9,17 @@
     tools:context="sumus.com.onepercent.LoginActivity">
 
     <LinearLayout
-        android:layout_marginTop="300dp"
+        android:layout_weight="5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_weight="1"
         android:id="@+id/inputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:orientation="vertical">
 
@@ -24,6 +30,7 @@
             android:layout_marginBottom="5dp"
             android:background="@mipmap/id_box"
             android:hint="핸드폰번호"
+            android:textColor="#000"
             android:inputType="number|phone"
             android:digits="1234567890"
             android:paddingLeft="50dp"
@@ -37,8 +44,8 @@
             android:layout_marginBottom="5dp"
             android:background="@mipmap/pw_box"
             android:hint="비밀번호"
+            android:textColor="#000"
             android:paddingLeft="50dp"
-            android:inputType="textPassword"
             android:singleLine="true"
             android:textSize="15sp" />
 
@@ -49,27 +56,38 @@
             android:layout_marginBottom="5dp"
             android:background="@mipmap/pw_box"
             android:hint="비밀번호 확인"
-            android:inputType="textPassword"
             android:paddingLeft="50dp"
             android:singleLine="true"
             android:textSize="15sp" />
 
         <TextView
+            android:layout_marginBottom="10dp"
             android:id="@+id/join_pwokTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text=" "
             android:textColor="@color/colorWhite" />
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/join_okBtn"
+            android:layout_width="270dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/join_btn"
+            android:layout_marginBottom="5dp" />
+
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/join_loginBtn"
+            android:singleLine="true"
+            android:background="@mipmap/login_btn"
+            android:layout_width="270dp"
+            android:padding="10dp"
+            android:layout_height="40dp" />
     </LinearLayout>
 
 
-    <Button
-        android:layout_gravity="center"
-        android:id="@+id/join_okBtn"
-        android:layout_width="270dp"
-        android:layout_height="40dp"
-        android:background="@mipmap/join_btn"
-        android:textSize="10sp" />
 
 </LinearLayout>

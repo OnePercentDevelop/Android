@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +33,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
+import sumus.com.onepercent.FontBaseActvity;
 import sumus.com.onepercent.LoginActivity;
 import sumus.com.onepercent.MainActivity;
 import sumus.com.onepercent.Object.MySharedPreference;
 import sumus.com.onepercent.R;
+import sumus.com.onepercent.SplashActivity;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener {
@@ -122,11 +125,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         ClockSet(); // 타이머 시간
         getVoteNumber_Server(); // 투표자수 갱신
 
+        FontBaseActvity fontBaseActvity = new FontBaseActvity();
+        fontBaseActvity.setGlobalFont(views);
+
         return views;
     }
 
     void InitWidget() {
         mContext = getContext();
+      
         main_clockTv = (TextView) views.findViewById(R.id.main_clockTv);
         main_gifticonTv = (TextView) views.findViewById(R.id.main_gifticonTv);
         main_voterCountTv = (TextView) views.findViewById(R.id.main_voterCountTv);
@@ -152,6 +159,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         nowStr = df.format(nowdate);
         today_YYYYMMDD = nowStr; // 오늘날짜 계산 및 변환
+        ((MainActivity)MainActivity.mContext).today_YYYYMMDD = nowStr;
     }
 
     void InitData(){
@@ -160,7 +168,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         if(nowStr.equals(today)) // oneday data 이미
             getMain_Reload();
         else                  // oneday data 아직
+        {
             getMain_Server();
+        }
     }
 
     void getMain_Reload(){
@@ -231,7 +241,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers.toString() + " , error : " + error.toString());
+                Log.d("SUN", "onFailure // statusCode : " + statusCode +  " , error : " + error.toString());
             }
 
             @Override
@@ -290,7 +300,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     void getImage_Server(String imgName) {
 
         AsyncHttpClient client = new AsyncHttpClient();
-        Log.d("SUN", "getImage_Server()");
+        Log.d("SUN", "MainFragment # getImage_Server()");
         client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/resources/common/image/"+imgName,  new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {            }
@@ -369,10 +379,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         Date base_date = null;
         long base_time=0, now_time, gap_time;
-
         try {
             now_time = System.currentTimeMillis(); // 현재시간
-
+            ((MainActivity)MainActivity.mContext).now_time = now_time;
             if( now_time  < (df.parse(today_YYYYMMDD+" 11:00:00")).getTime()  ){
                 base_time = (df.parse(today_YYYYMMDD+" 11:00:00")).getTime();
                 main_timerTv.setText("투표 시작 시간");

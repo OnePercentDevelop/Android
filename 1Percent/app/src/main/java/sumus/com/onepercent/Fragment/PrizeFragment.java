@@ -27,6 +27,7 @@ import com.loopj.android.http.RequestParams;
 import java.text.SimpleDateFormat;
 
 import cz.msebera.android.httpclient.Header;
+import sumus.com.onepercent.FontBaseActvity;
 import sumus.com.onepercent.Object.MySharedPreference;
 import sumus.com.onepercent.R;
 
@@ -119,14 +120,18 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
         String now = df.format(nowdate);
         String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
 
-
+        FontBaseActvity fontBaseActvity = new FontBaseActvity();
+        fontBaseActvity.setGlobalFont(views);
 
         return views;
     }
 
     void  InitWidget(){
         prize_giftImg =  (ImageView)views.findViewById(R.id.prize_giftImg);
-        prize_giftImg.setImageBitmap(byteArrayToBitmap(Base64.decode(pref.getPreferences("oneday","giftImg"), Base64.DEFAULT)));
+
+
+        if(pref.getPreferences("oneday","giftImg").equals("") != true)
+            prize_giftImg.setImageBitmap(byteArrayToBitmap(Base64.decode(pref.getPreferences("oneday","giftImg"), Base64.DEFAULT)));
 
         prize_animaitonImg =  (ImageView)views.findViewById(R.id.prize_animaitonImg);
         prize_animaitonImg.setBackgroundResource(R.drawable.animaiton_list);

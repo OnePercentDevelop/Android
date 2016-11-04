@@ -32,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -85,12 +86,13 @@
         android:text="오늘의 질문" />
 
     <TextView
+        android:id="@+id/vote_questionTv"
         style="@style/main_small_gray"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:text="다음 보기중 오늘 사람들이" />
+        android:text="질문" />
 
 
     <RadioGroup

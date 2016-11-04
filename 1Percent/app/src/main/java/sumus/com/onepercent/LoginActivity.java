@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,7 +25,7 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 import sumus.com.onepercent.Object.MySharedPreference;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends FontBaseActvity {
     EditText login_phoneEt, longin_pwdEt;
     TextView login_joinTv;
     Button login_loginBtn;
@@ -61,17 +63,15 @@ public class LoginActivity extends AppCompatActivity {
                 String pwd = longin_pwdEt.getText().toString();
                 if(isPhoneNumber(phone) && isPassword(pwd)){ // + 서버 연동
                     getLogin_Server(phone,pwd);
-//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                    pref.setPreferences("user","userPwd", pwd);
-//                    pref.setPreferences("user","userPhone",phone );
-//                    startActivity(intent);
-//                    finish();
                 }
                 else{
                     Toast.makeText(mContext,"다시한번 확인해주세요",Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        longin_pwdEt.setInputType( InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD );
+        longin_pwdEt.setTransformationMethod(PasswordTransformationMethod.getInstance());
     }
 
     boolean isPhoneNumber(String str){
@@ -84,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
         }catch (Exception e){
                   return false;
         }
-
     }
 
     boolean isPassword(String str){
@@ -99,9 +98,9 @@ public class LoginActivity extends AppCompatActivity {
         final RequestParams params = new RequestParams();
         params.put("user_id",id);
         params.put("user_password",pwd);
-
+        Log.d("SUN","LoginActivity # getLogin_Server"+ id + " "+ pwd);
         AsyncHttpClient client = new AsyncHttpClient();
-        Log.d("SUN", "JoinActivity # getJoin_Server()");
+        Log.d("SUN", "LoginActivity # getLogin_Server()");
         client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/login.do",params,new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {
@@ -125,11 +124,11 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (state.equals("success")) {
                             Toast.makeText(mContext, "로그인 완료", Toast.LENGTH_SHORT).show();
-                            pref.setPreferences("user", "userPwd",id + "");
-                            pref.setPreferences("user", "userPhone", pwd + "");
+                            pref.setPreferences("user", "userPhone",id + "");
+                            pref.setPreferences("user", "userPwd", pwd + "");
 
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
+                            Intent intent = getIntent();
+                            setResult(RESULT_OK, intent);
                             finish();
                         } else {
                             Toast.makeText(mContext, "로그인 실패", Toast.LENGTH_SHORT).show();

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,13 +31,17 @@ import java.text.SimpleDateFormat;
 import cz.msebera.android.httpclient.Header;
 import sumus.com.onepercent.Object.MySharedPreference;
 
-public class JoinActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener {
+public class JoinActivity extends FontBaseActvity implements TextWatcher, View.OnClickListener {
 
+
+    // Activity
     Context mContext;
+    final static int REQUEST_LOGIN = 1000;
 
+    // Widget
     EditText join_phoneEt, join_pwd1Et, join_pwd2Et;
     TextView join_pwokTv;
-    Button join_okBtn;
+    Button join_okBtn, join_loginBtn;
 
     Boolean phone_flag = true;
     Boolean pwd_flag = false;
@@ -58,11 +64,21 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
         join_pwd2Et = (EditText) findViewById(R.id.join_pwd2Et);
         join_pwokTv = (TextView) findViewById(R.id.join_pwokTv);
 
+        join_pwd1Et.setInputType( InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD );
+        join_pwd1Et.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        join_pwd2Et.setInputType( InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD );
+        join_pwd2Et.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
         join_pwd1Et.addTextChangedListener(this);
         join_pwd2Et.addTextChangedListener(this);
 
         join_okBtn = (Button) findViewById(R.id.join_okBtn);
         join_okBtn.setOnClickListener(this);
+
+        join_loginBtn = (Button) findViewById(R.id.join_loginBtn);
+        join_loginBtn.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -101,7 +117,7 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
                     long nowdate = System.currentTimeMillis(); // 현재시간
                     SimpleDateFormat df = new SimpleDateFormat("yyyy년MM월dd일");
                     String deviceToken = FirebaseInstanceId.getInstance().getToken();
-                    getJoin_Server(id,pwd,deviceToken,df.format(nowdate).toString());
+                    setJoin_Server(id,pwd,deviceToken,df.format(nowdate).toString());
 
                 } else if (!phone_flag && pwd_flag) {
                     Toast.makeText(mContext, "중복확인을 해주세요", Toast.LENGTH_SHORT).show();
@@ -110,12 +126,16 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
                 }
 
                 break;
+            case R.id.join_loginBtn:
 
+                Intent intent = new Intent(mContext, LoginActivity.class);
+                startActivityForResult(intent,REQUEST_LOGIN);
+                break;
         }
     }
 
 
-    void getJoin_Server(final String id, final String pwd, String token, String date) {
+    void setJoin_Server(final String id, final String pwd, String token, String date) {
         //((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
         final RequestParams params = new RequestParams();
         params.put("user_id",id);
@@ -149,14 +169,12 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
 
                         if (state.equals("success")) {
                             Toast.makeText(mContext, "회원가입 완료", Toast.LENGTH_SHORT).show();
-                            pref.setPreferences("user", "userPwd",id + "");
-                            pref.setPreferences("user", "userPhone", pwd + "");
+                            pref.setPreferences("user", "userPhone",id + "");
+                            pref.setPreferences("user", "userPwd", pwd + "");
 
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(mContext, "회원가입 실패", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "이미 존재하는 번호입니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (JSONException e) {
@@ -174,6 +192,23 @@ public class JoinActivity extends AppCompatActivity implements TextWatcher, View
             public void onRetry(int retryNo) {
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_LOGIN:
+                String select_date;
+                if (resultCode == RESULT_OK) {
+                    finish();
+                } else {
+
+                }
+
+        }
     }
 
     void FCMSetting(){

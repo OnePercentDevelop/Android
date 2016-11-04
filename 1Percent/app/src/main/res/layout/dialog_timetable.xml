@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:orientation="vertical"
+    android:background="#393C3F"
+    android:layout_height="600dp">
+
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="280dp"
+        android:background="#393C3F"
+        android:layout_height="600dp">
+
+
+        <ImageView
+            android:id="@+id/dialog_timetableImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorTran"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/before_vote" />
+
+        <ImageButton
+            android:id="@+id/dialog_closeBtn"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorTran"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/close" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package sumus.com.onepercent;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -11,12 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,14 +34,13 @@ import sumus.com.onepercent.Fragment.VoteFragment;
 import sumus.com.onepercent.Object.SectionsPagerAdapter;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends FontBaseActvity implements View.OnClickListener {
     /*
       (f) InitWidget : 위젯 초기 설정
       (f) InitActionBar : 액션바 초기 설정
       (f) AnimationStart : 클릭 애니메이션
       (f) FCMSetting : FCM 세팅 및 토큰
       */
-    final static int REQUEST_CALENDER = 1000;
     public static Context mContext;
 
     // fragment
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // 변수
     public Boolean vote_possible = false;
+    public String today_YYYYMMDD;
+    public long now_time=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,36 +140,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         actionView = getSupportActionBar().getCustomView();
         actionView.findViewById(R.id.action_settingBtn).setOnClickListener(this);
+
         action_titleTv = (TextView) actionView.findViewById(R.id.action_titleTv);
         action_settingBtn = (ImageButton) actionView.findViewById(R.id.action_settingBtn);
         action_settingBtn.setOnClickListener(this);
+
+
+        FontBaseActvity fontBaseActvity = new FontBaseActvity();
+        fontBaseActvity.setGlobalFont(actionView);
     }
 
     @Override
     public void onClick(View v) {
-//        Animation anim = null;
-//        anim = new AlphaAnimation(0, 1);
         AnimationStart(v.getId());
 
         switch (v.getId()){
             case R.id.action_settingBtn :
                 switch(mViewPager.getCurrentItem()){
                     case 0:
-                        Toast.makeText(getApplicationContext(),"home",Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(),"home",Toast.LENGTH_SHORT).show();
+//                        Intent intent  = new Intent(this,JoinActivity.class);
+//                        startActivity(intent);
+                        LayoutInflater inflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View layout = inflate.inflate(R.layout.dialog_timetable, null);
+
+                        AlertDialog.Builder aDialog = new AlertDialog.Builder(mContext);
+                        aDialog.setView(layout);
+
+                        final AlertDialog ad = aDialog.create();
+
+                        ImageView dialog_timetableImg = (ImageView) layout.findViewById(R.id.dialog_timetableImg);
+                        ImageButton dialog_closeBtn = (ImageButton) layout.findViewById(R.id.dialog_closeBtn);
+                        dialog_closeBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ad.cancel();
+                            }
+                        });
+
+                        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+
+                        try {
+                            if (now_time < (df.parse(today_YYYYMMDD + " 11:00:00")).getTime()) {
+                                dialog_timetableImg.setImageDrawable(getResources().getDrawable(R.mipmap.before_vote));
+                            } else if (now_time < (df.parse(today_YYYYMMDD + " 13:00:00")).getTime()) {
+                                dialog_timetableImg.setImageDrawable(getResources().getDrawable(R.mipmap.voting));
+                            } else if (now_time < (df.parse(today_YYYYMMDD + " 18:45:00")).getTime()) {
+                                dialog_timetableImg.setImageDrawable(getResources().getDrawable(R.mipmap.before_prize));
+                            } else if (now_time <= (df.parse(today_YYYYMMDD + " 23:59:59")).getTime()) {
+                                dialog_timetableImg.setImageDrawable(getResources().getDrawable(R.mipmap.prizing));
+                            }
+                        }catch (Exception e){
+
+                        }
+
+
+                        ad.show();
                         break;
 
                     case 1:
-                        Toast.makeText(getApplicationContext(),"question",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(mContext, CalenderActivity.class);
-                        startActivityForResult(intent,REQUEST_CALENDER);
+                       // Toast.makeText(getApplicationContext(),"vote",Toast.LENGTH_SHORT).show();
                         break;
 
                     case 2:
-                        Toast.makeText(getApplicationContext(),"prize",Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(),"prize",Toast.LENGTH_SHORT).show();
                         break;
 
                     case 3:
-                        Toast.makeText(getApplicationContext(),"more",Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(getApplicationContext(),"more",Toast.LENGTH_SHORT).show();
                         break;
                 }
                 break;
@@ -185,29 +228,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Log.d("SUN","MainAcitivty # FCMSetting : " + deviceToken);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-            case REQUEST_CALENDER:
-                String select_date;
-                if (resultCode == RESULT_OK) {
-                    select_date = data.getStringExtra("select_date");
-                    Toast.makeText(mContext, "select_date : " + select_date, Toast.LENGTH_SHORT).show();
-                    VoteFragment.newInstance("calender","select_date");
-                    //mSectionsPagerAdapter.getFragment(1).getFragmentManager().findFragmentById(R.id.)
-                   // mSectionsPagerAdapter.getItem(1).getFragmentManager().beginTransaction().replace(R.id.main_contents, VoteFragment.newInstance(select_date,"world")).commit();
-
-
-                } else {
-                    long now = System.currentTimeMillis();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                    select_date = df.format(now);
-                   Toast.makeText(mContext, "select_date : " + select_date, Toast.LENGTH_SHORT).show();
-
-                }
-
-        }
-    }
 }

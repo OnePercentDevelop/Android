@@ -21,8 +21,20 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.Base64;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 
+import cz.msebera.android.httpclient.Header;
+import sumus.com.onepercent.FontBaseActvity;
+import sumus.com.onepercent.JoinActivity;
 import sumus.com.onepercent.LoginActivity;
 import sumus.com.onepercent.MainActivity;
 import sumus.com.onepercent.Object.MySharedPreference;
@@ -30,7 +42,14 @@ import sumus.com.onepercent.R;
 
 
 public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener{
-    private static final String ARG_PARAM1 = "param1";
+       /*
+        (f) InitWidget : 위젯 초기 설정
+        (f) InitData : 기본 데이터 로드하기
+        (f) getMain_Server : 오늘의 data 서버 연동
+        */
+
+    // fragment init data
+        private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
@@ -44,13 +63,13 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
     RadioButton  vote_radio[] = new RadioButton[5];
     int radio[] = {0,R.id.vote_radio1, R.id.vote_radio2, R.id.vote_radio3, R.id.vote_radio4};
     ImageButton vote_voteBtn, vote_calenderBtn;
-    TextView vote_dateTv;
+    TextView vote_dateTv, vote_questionTv;
 
 
     // 변수
     int vote_number = 0;
     MySharedPreference pref;
-    String today_YYYYMMDD;
+    String today_YYYYMMDD, day_YYYYMMDD;
 
     public VoteFragment() {
     }
@@ -82,14 +101,32 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
         //Log.d("SUN","VoteFragment # mParam1 : "+mParam1);
         mActivity = getActivity();
         InitWidet();
+        InitData();
+
+        FontBaseActvity fontBaseActvity = new FontBaseActvity();
+        fontBaseActvity.setGlobalFont(views);
 
         return views;
 
     }
 
+    public void InitData() {
+        String question = pref.getPreferences("oneday","question");
+        if(question.equals(""))
+        {
+            getMain_Server();
+        }
+        else {
+            vote_questionTv.setText(question);
+            for (int z = 1; z <= 4; z++) {
+                String ex = pref.getPreferences("oneday", "ex" + z);
+                vote_radio[z].setText("" + ex);
+            }
+        }
+
+    }
+
     void InitWidet() {
-
-
 
         pref = new MySharedPreference(mActivity);
         vote_radiogroup = (RadioGroup) views.findViewById(R.id.vote_radiogroup);
@@ -110,10 +147,11 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
         }
 
         long nowdate = System.currentTimeMillis(); // 현재시간
-        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy년MM월dd일");
+        today_YYYYMMDD = df.format(nowdate).toString();
         vote_dateTv = (TextView)views.findViewById(R.id.vote_dateTv);
-        vote_dateTv.setText(df.format(nowdate).toString());
-
+        vote_dateTv.setText(today_YYYYMMDD);
+        vote_questionTv= (TextView)views.findViewById(R.id.vote_questionTv);
         vote_voteBtn = (ImageButton) views.findViewById(R.id.vote_voteBtn);
         vote_voteBtn.setOnClickListener(this);
         vote_calenderBtn = (ImageButton) views.findViewById(R.id.vote_calenderBtn);
@@ -143,7 +181,7 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.vote_voteBtn:
-                if (((MainActivity) MainActivity.mContext).vote_possible == true) {
+                if (((MainActivity) MainActivity.mContext).vote_possible != true) {
                     if (vote_number <= 0) { // 보기 선택 안했을때
                         Toast.makeText(mActivity, "보기를 선택해 주세요", Toast.LENGTH_SHORT).show();
                     } else if (pref.getPreferences("oneday", "vote").equals("")) { // 투표 안했을 때
@@ -172,9 +210,9 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                             dialog_loginOkBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(mActivity, LoginActivity.class);
+                                    Intent intent = new Intent(mActivity, JoinActivity.class);
                                     startActivity(intent);
-                                    ((MainActivity) MainActivity.mContext).finish();
+
                                     ad.cancel();
                                 }
                             });
@@ -185,12 +223,13 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                             dialog_loginOkBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    pref.setPreferences("oneday", "vote", vote_number + "");
+
 
                                     for (int i = 1; i < 5; i++) {
                                         vote_radio[i].setEnabled(false);
                                     }
                                     vote_radio[vote_number].setChecked(true);
+                                    setVote_Server( pref.getPreferences("user", "userPhone"),today_YYYYMMDD,vote_number+"");
                                     ad.cancel();
                                 }
                             });
@@ -221,20 +260,20 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                 final CalendarView calendarView = (CalendarView)layout.findViewById(R.id.calendarView);
                 AnimationStart(R.id.vote_calenderBtn);
                 calendarView.setMaxDate(System.currentTimeMillis());
-                calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-                    @Override
-                    public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                        today_YYYYMMDD = year+"/"+(month+1)+"/"+dayOfMonth;
-                    }
-                });
+//                calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+//                    @Override
+//                    public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+//                        today_YYYYMMDD = year+"/"+(month+1)+"/"+dayOfMonth;
+//                    }
+//                });
 
                 calender_okBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         long now = calendarView.getDate();
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
-                        today_YYYYMMDD = df.format(now);
-                        vote_dateTv.setText(today_YYYYMMDD);
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy년MM월dd일");
+                        day_YYYYMMDD = df.format(now);
+                        vote_dateTv.setText(day_YYYYMMDD);
                         ad.cancel();
                     }
                 });
@@ -243,9 +282,9 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                     @Override
                     public void onClick(View v) {
                         long now = System.currentTimeMillis();
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
-                        today_YYYYMMDD = df.format(now);
-                        vote_dateTv.setText(today_YYYYMMDD);
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy년MM월dd일");
+                        day_YYYYMMDD = df.format(now);
+                        vote_dateTv.setText(day_YYYYMMDD);
                         ad.cancel();
                     }
                 });
@@ -257,6 +296,106 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
 
         }
     }
+
+    void getMain_Server() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        Log.d("SUN", "MainFragment # getMain_Server()");
+        client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/main.do", new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {    }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+                String res = new String(response);
+                try {
+                    JSONObject object = new JSONObject(res);
+                    String objStr = object.get("main_result") + "";
+                    JSONArray arr = new JSONArray(objStr);
+                    for (int i = 0; i < arr.length(); i++) {
+
+                        JSONObject obj = (JSONObject) arr.get(i);
+
+                        String question = (String) obj.get("question");
+                        vote_questionTv.setText(question);
+
+
+                        JSONArray exArr = (JSONArray) obj.get("example");
+                        for (int z = 1; z <= 4; z++) {
+                            JSONObject exObj = (JSONObject) exArr.get(0);
+                            String ex = (String) exObj.get(z + "");
+                            pref.setPreferences("oneday","ex"+z, ex);
+                            vote_radio[z].setText(ex+"");
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("SUN", "e : " + e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers + " , error : " + error.toString());
+            }
+
+            @Override
+            public void onRetry(int retryNo) {  }
+        });
+    }
+
+
+    void setVote_Server(String user_id, String vote_date, final String vote_answer) {
+        RequestParams params = new RequestParams();
+        params.put("user_id",user_id);
+        params.put("vote_date",vote_date);
+        params.put("vote_answer",vote_answer);
+        Log.d("SUN", "user_id="+user_id+"&vote_date="+vote_date+"&vote_answer="+vote_answer);
+        AsyncHttpClient client = new AsyncHttpClient();
+        Log.d("SUN", "MainFragment # getMain_Server()");
+        client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/insertVote.do",params ,new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {    }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                Log.d("SUN", "statusCode : " + statusCode + " , response : " + new String(response));
+                String res = new String(response);
+                try {
+                    JSONObject object = new JSONObject(res);
+                    String objStr = object.get("vote_result") + "";
+
+                    JSONArray arr = new JSONArray(objStr);
+
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj = (JSONObject) arr.get(i);
+                        String state = (String) obj.get("state");
+
+                        if (state.equals("success")) {
+                            Toast.makeText(mActivity, "투표 완료", Toast.LENGTH_SHORT).show();
+                            pref.setPreferences("oneday", "vote", vote_answer);
+
+                        } else {
+                            Toast.makeText(mActivity, "이미 투표 ", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("SUN", "e : " + e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers.toString() + " , error : " + error.toString());
+            }
+
+            @Override
+            public void onRetry(int retryNo) {  }
+        });
+    }
+
 
     void AnimationStart(int id){
         Animation anim =  new AlphaAnimation(0, 1);
