@@ -40,6 +40,7 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
     (f) byteArrayToBitmap :  byte 를 bitmap으로 변환
     (f) StartAccelerSensor :  가속도 센서 측정 가능 상태
     (f) StopAccelerSensor : 가속도 센서 측정 중지 상태
+    (f) InitAccelerSensor : 가속소 센서 초기 설정
     */
 
 
@@ -48,7 +49,6 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-
 
     // 가속도 센서
     private long lastTime;
@@ -74,11 +74,8 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
     ImageView prize_animaitonImg, prize_giftImg;
     TextView prize_shakeTv;
 
-    // animation
-    AnimationDrawable frameAnimation;
-
-
-
+    // 변수
+    AnimationDrawable frameAnimation; // 애니메이션
     MySharedPreference pref;
 
   public PrizeFragment() {  }
@@ -105,20 +102,13 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       // Log.d("SUN", "PrizeFragment # "+ mParam1 + " , "+ mParam2);
+
+        views = inflater.inflate(R.layout.fragment_prize, container, false);
         mActivity = getActivity();
         pref = new MySharedPreference(mActivity);
-        views = inflater.inflate(R.layout.fragment_prize, container, false);
 
-        sensorManager = (SensorManager) mActivity.getSystemService(SENSOR_SERVICE);
-        accelerormeterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
+        InitAccelerSensor();
         InitWidget();
-
-        long nowdate = System.currentTimeMillis(); // 현재시간
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-        String now = df.format(nowdate);
-        String today = pref.getPreferences("oneday","today"); // 오늘 데이터 유무 확인
 
         FontBaseActvity fontBaseActvity = new FontBaseActvity();
         fontBaseActvity.setGlobalFont(views);
@@ -126,6 +116,10 @@ public class PrizeFragment extends Fragment implements SensorEventListener {
         return views;
     }
 
+    void InitAccelerSensor(){
+        sensorManager = (SensorManager) mActivity.getSystemService(SENSOR_SERVICE);
+        accelerormeterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    }
     void  InitWidget(){
         prize_giftImg =  (ImageView)views.findViewById(R.id.prize_giftImg);
 

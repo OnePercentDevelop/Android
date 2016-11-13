@@ -42,11 +42,11 @@ import sumus.com.onepercent.R;
 
 
 public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener{
-       /*
-        (f) InitWidget : 위젯 초기 설정
-        (f) InitData : 기본 데이터 로드하기
-        (f) getMain_Server : 오늘의 data 서버 연동
-        */
+   /*
+    (f) InitWidget : 위젯 초기 설정
+    (f) InitData : 기본 데이터 로드하기
+    (f) getMain_Server : 오늘의 data 서버 연동
+    */
 
     // fragment init data
         private static final String ARG_PARAM1 = "param1";
@@ -65,14 +65,14 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
     ImageButton vote_voteBtn, vote_calenderBtn;
     TextView vote_dateTv, vote_questionTv;
 
-
     // 변수
     int vote_number = 0;
     MySharedPreference pref;
     String today_YYYYMMDD, day_YYYYMMDD;
+    SimpleDateFormat df_circle = new SimpleDateFormat("yyyy.MM.dd");
+    SimpleDateFormat df_korean = new SimpleDateFormat("yyyy년MM월dd일");
 
-    public VoteFragment() {
-    }
+    public VoteFragment() {    }
 
     public static VoteFragment newInstance(String param1, String param2) {
         VoteFragment fragment = new VoteFragment();
@@ -89,8 +89,6 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
-
         }
     }
 
@@ -98,24 +96,21 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         views = inflater.inflate(R.layout.fragment_vote, container, false);
-        //Log.d("SUN","VoteFragment # mParam1 : "+mParam1);
         mActivity = getActivity();
         InitWidet();
         InitData();
+        InitVote();
 
         FontBaseActvity fontBaseActvity = new FontBaseActvity();
         fontBaseActvity.setGlobalFont(views);
 
         return views;
-
     }
 
     public void InitData() {
         String question = pref.getPreferences("oneday","question");
         if(question.equals(""))
-        {
             getMain_Server();
-        }
         else {
             vote_questionTv.setText(question);
             for (int z = 1; z <= 4; z++) {
@@ -126,14 +121,7 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
 
     }
 
-    void InitWidet() {
-
-        pref = new MySharedPreference(mActivity);
-        vote_radiogroup = (RadioGroup) views.findViewById(R.id.vote_radiogroup);
-        for(int i=1; i<5; i++){
-            vote_radio[i] =(RadioButton) views.findViewById( radio[i]);
-        }
-
+    public void InitVote(){
         if(pref.getPreferences("oneday","vote").equals(""))
             vote_radiogroup.setOnCheckedChangeListener(this);
         else{
@@ -145,10 +133,18 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                 vote_radio[i].setEnabled(false);
             }
         }
+    }
+    void InitWidet() {
+
+        pref = new MySharedPreference(mActivity);
+        vote_radiogroup = (RadioGroup) views.findViewById(R.id.vote_radiogroup);
+        for(int i=1; i<5; i++)
+            vote_radio[i] =(RadioButton) views.findViewById( radio[i]);
 
         long nowdate = System.currentTimeMillis(); // 현재시간
-        SimpleDateFormat df = new SimpleDateFormat("yyyy년MM월dd일");
-        today_YYYYMMDD = df.format(nowdate).toString();
+        today_YYYYMMDD = df_circle.format(nowdate).toString();
+        day_YYYYMMDD = df_korean.format(nowdate).toString();
+
         vote_dateTv = (TextView)views.findViewById(R.id.vote_dateTv);
         vote_dateTv.setText(today_YYYYMMDD);
         vote_questionTv= (TextView)views.findViewById(R.id.vote_questionTv);
@@ -181,7 +177,7 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.vote_voteBtn:
-                if (((MainActivity) MainActivity.mContext).vote_possible != true) {
+                if (((MainActivity) MainActivity.mContext).vote_possible == true) {
                     if (vote_number <= 0) { // 보기 선택 안했을때
                         Toast.makeText(mActivity, "보기를 선택해 주세요", Toast.LENGTH_SHORT).show();
                     } else if (pref.getPreferences("oneday", "vote").equals("")) { // 투표 안했을 때
@@ -200,7 +196,6 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                         dialog_loginCancleBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 ad.cancel();
                             }
                         });
@@ -212,43 +207,34 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                                 public void onClick(View v) {
                                     Intent intent = new Intent(mActivity, JoinActivity.class);
                                     startActivity(intent);
-
                                     ad.cancel();
                                 }
                             });
-
-
-                        } else {
+                        }
+                        else {
                             dialog_loginTv.setText(vote_number + "번으로 투표하시겠습니까?");
                             dialog_loginOkBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-
-
-                                    for (int i = 1; i < 5; i++) {
+                                    for (int i = 1; i < 5; i++)
                                         vote_radio[i].setEnabled(false);
-                                    }
                                     vote_radio[vote_number].setChecked(true);
-                                    setVote_Server( pref.getPreferences("user", "userPhone"),today_YYYYMMDD,vote_number+"");
+                                    setVote_Server( pref.getPreferences("user", "userPhone"),day_YYYYMMDD, vote_number+"");
                                     ad.cancel();
                                 }
                             });
-
                         }
-                    } else {
-
-                        Toast.makeText(mActivity, "이미 투표 하셨습니다", Toast.LENGTH_SHORT).show();
                     }
+                    else
+                        Toast.makeText(mActivity, "이미 투표 하셨습니다", Toast.LENGTH_SHORT).show();
                 }
-                else{
+                else
                     Toast.makeText(mActivity, "투표 가능한 시간이 아닙니다", Toast.LENGTH_SHORT).show();
-                }
                 break;
 
             case R.id.vote_calenderBtn:
                 LayoutInflater inflate = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View layout = inflate.inflate(R.layout.dialog_calender, null);
-
 
                 AlertDialog.Builder aDialog = new AlertDialog.Builder(mActivity);
                 aDialog.setView(layout);
@@ -260,20 +246,13 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                 final CalendarView calendarView = (CalendarView)layout.findViewById(R.id.calendarView);
                 AnimationStart(R.id.vote_calenderBtn);
                 calendarView.setMaxDate(System.currentTimeMillis());
-//                calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-//                    @Override
-//                    public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-//                        today_YYYYMMDD = year+"/"+(month+1)+"/"+dayOfMonth;
-//                    }
-//                });
 
                 calender_okBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         long now = calendarView.getDate();
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy년MM월dd일");
-                        day_YYYYMMDD = df.format(now);
-                        vote_dateTv.setText(day_YYYYMMDD);
+                        day_YYYYMMDD = df_korean.format(now);
+                        vote_dateTv.setText(df_circle.format(now));
                         ad.cancel();
                     }
                 });
@@ -282,14 +261,11 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                     @Override
                     public void onClick(View v) {
                         long now = System.currentTimeMillis();
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy년MM월dd일");
-                        day_YYYYMMDD = df.format(now);
-                        vote_dateTv.setText(day_YYYYMMDD);
+                        day_YYYYMMDD = df_korean.format(now);
+                        vote_dateTv.setText(df_circle.format(now));
                         ad.cancel();
                     }
                 });
-
-
 
                 break;
 
@@ -319,7 +295,6 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                         String question = (String) obj.get("question");
                         vote_questionTv.setText(question);
 
-
                         JSONArray exArr = (JSONArray) obj.get("example");
                         for (int z = 1; z <= 4; z++) {
                             JSONObject exObj = (JSONObject) exArr.get(0);
@@ -328,7 +303,6 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
                             vote_radio[z].setText(ex+"");
                         }
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("SUN", "e : " + e.toString());
@@ -337,7 +311,7 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers + " , error : " + error.toString());
+                Log.d("SUN", "VoteFragment # getMain_Server # onFailure // statusCode : " + statusCode +  " , error : " + error.toString());
             }
 
             @Override
@@ -351,7 +325,7 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
         params.put("user_id",user_id);
         params.put("vote_date",vote_date);
         params.put("vote_answer",vote_answer);
-        Log.d("SUN", "user_id="+user_id+"&vote_date="+vote_date+"&vote_answer="+vote_answer);
+
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "MainFragment # getMain_Server()");
         client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/insertVote.do",params ,new AsyncHttpResponseHandler() {
@@ -374,7 +348,7 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
 
                         if (state.equals("success")) {
                             Toast.makeText(mActivity, "투표 완료", Toast.LENGTH_SHORT).show();
-                            pref.setPreferences("oneday", "vote", vote_answer);
+                            pref.setPreferences("oneday","vote", vote_answer);
 
                         } else {
                             Toast.makeText(mActivity, "이미 투표 ", Toast.LENGTH_SHORT).show();
@@ -388,7 +362,7 @@ public class VoteFragment extends Fragment implements RadioGroup.OnCheckedChange
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("SUN", "onFailure // statusCode : " + statusCode + " , headers : " + headers.toString() + " , error : " + error.toString());
+                Log.d("SUN", "VoteFragment # setVote_Server # onFailure // statusCode : " + statusCode +  " , error : " + error.toString());
             }
 
             @Override

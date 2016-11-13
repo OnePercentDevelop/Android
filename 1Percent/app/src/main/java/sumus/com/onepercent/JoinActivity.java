@@ -26,9 +26,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 import sumus.com.onepercent.Object.MySharedPreference;
 
 public class JoinActivity extends FontBaseActvity implements TextWatcher, View.OnClickListener {
@@ -106,11 +108,13 @@ public class JoinActivity extends FontBaseActvity implements TextWatcher, View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.join_okBtn:
-                if (pwd_flag && phone_flag) {
-                  // Toast.makeText(mContext, "회원가입 및 로그인이 되었습니다.", Toast.LENGTH_SHORT).show();
 
-                    String id = join_phoneEt.getText().toString();
-                    String pwd = join_pwd2Et.getText().toString();
+                String id = join_phoneEt.getText().toString();
+                String pwd = join_pwd2Et.getText().toString();
+
+
+                if (pwd_flag && phone_flag && (id.length()==11) ) {
+                  // Toast.makeText(mContext, "회원가입 및 로그인이 되었습니다.", Toast.LENGTH_SHORT).show();
 
 
                    // FCMSetting();
@@ -136,17 +140,25 @@ public class JoinActivity extends FontBaseActvity implements TextWatcher, View.O
 
 
     void setJoin_Server(final String id, final String pwd, String token, String date) {
-        //((MainActivity)MainActivity.mContext).progresscircle.setVisibility(View.VISIBLE);
-        final RequestParams params = new RequestParams();
-        params.put("user_id",id);
-        params.put("user_password",pwd);
-        params.put("user_token",token);
-        params.put("sign_date",date);
-        Log.d("SUN",id + " / " + pwd + " / " + token + " / "+ date);
+
+        JSONObject json = new JSONObject();
+        StringEntity entitiy = null;
+        try{
+            json.put("user_id",id);
+            json.put("user_password",pwd);
+            json.put("user_token",token);
+            json.put("sign_date", date); // URLEncoder.encode(date, "UTF-8")
+            entitiy = new StringEntity(json.toString());
+            Log.d("SUN","JoinActivity # json.toString : "+json.toString());
+        }catch (JSONException e){
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         AsyncHttpClient client = new AsyncHttpClient();
         Log.d("SUN", "JoinActivity # getJoin_Server()");
-        client.get("http://onepercentserver.azurewebsites.net/OnePercentServer/insertUser.do",params,new AsyncHttpResponseHandler() {
+        client.post(mContext,"http://onepercentserver.azurewebsites.net/OnePercentServer/insertUser.do",entitiy,  "application/json;",new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {
             }

@@ -74,6 +74,7 @@ public class MainActivity extends FontBaseActvity implements View.OnClickListene
 
     void InitWidget() {
         // tab layout
+        today_YYYYMMDD = ((SplashActivity)SplashActivity.mContext).today_YYYYMMDD;
 
         mPagerAdapter = new sumus.com.onepercent.Object.PagerAdapter(this);
 
@@ -208,6 +209,8 @@ public class MainActivity extends FontBaseActvity implements View.OnClickListene
 
                     case 3:
                       //  Toast.makeText(getApplicationContext(),"more",Toast.LENGTH_SHORT).show();
+                        Intent intent  = new Intent(this,JoinActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 break;

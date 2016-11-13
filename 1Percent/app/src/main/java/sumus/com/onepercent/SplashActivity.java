@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ public class SplashActivity extends AppCompatActivity {
         long nowdate = System.currentTimeMillis(); // 현재시간
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         today_YYYYMMDD = df.format(nowdate);
+        Log.d("SUN","SplashActivity # today_YYYYMMDD "+today_YYYYMMDD);
 
         if(!pref.getPreferences("oneday","today").equals(today_YYYYMMDD))
             pref.removeAllPreferences("oneday"); // 데이터 초기화
